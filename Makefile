@@ -24,11 +24,11 @@ test:
 schemas:
 	$(UV_RUN) python scripts/validate_outputs.py
 
-# pytest exits 5 when it collects nothing. Until M2 adds the first sandbox test that is the
-# expected state; say so loudly instead of passing silently. Remove this allowance in M2.
+# pytest exits 5 when it collects nothing. Until the real tier exists (it needs the owner's sandbox
+# account, ADR-0009 §1) that is the expected state; say so loudly instead of passing silently.
 integration:
 	@$(UV_RUN) pytest -m integration --force-enable-socket; rc=$$?; \
-	if [ $$rc -eq 5 ]; then echo "make integration: NO integration tests exist yet (first ones arrive in M2)"; exit 0; fi; \
+	if [ $$rc -eq 5 ]; then echo "make integration: NO integration tests exist yet (the real tier needs a sandbox account, ADR-0009)"; exit 0; fi; \
 	exit $$rc
 
 demo:

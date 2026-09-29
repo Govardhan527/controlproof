@@ -387,3 +387,22 @@ controlproof --version
 - The IAM action name for every call (AWS Service Authorization Reference).
 - Whether moto can seed its random resource ids, which golden files from moto runs need.
   Otherwise the golden test normalises generated ids.
+
+### 10. Implementation notes (2026-09-29, unit tier built)
+- **Golden run by record and replay.** moto invents ids and uses the wall clock, so a golden run
+  from live moto changes every time. `tests/fixtures/recordings/aws-baseline.json` holds the
+  redacted request and response of every call the shipped controls make against a fixed moto
+  scenario. The golden test replays it through the same control code into
+  `examples/runs/aws-baseline/`, and another test checks that a live moto run still gives the same
+  statuses. A recording from the real sandbox can replace the moto one without code changes. The M1
+  stub golden files are retired; the stubs stay as tests of the `error` and `not_tested` mappings.
+- **Controls receive plain JSON** (timestamps as ISO strings), both live and replayed.
+- **Every OSCAL observation links its evidence file** (`relevant-evidence.href`), the manifest
+  hashes every file including evidence, and a run citing evidence it did not store is not
+  written.
+- **Evidence error messages are redacted too.** AWS error text can include account ids.
+- **Tests cannot reach a real account:** an autouse fixture sets fake credentials, points the AWS
+  config and credential files at an empty path, and disables instance metadata.
+- **Formats:** `run-record` and `profile` are at 1.1.0 (ADR-0003 MINOR), and `evidence-record`
+  1.0.0 is new. A 1.0.0 profile still loads.
+- **8 of the 10 M2 controls are built.** ac-6.2 and ia-2.1 wait on OQ-7 (SPEC_NOTES §6).

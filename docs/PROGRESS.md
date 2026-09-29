@@ -62,20 +62,26 @@ schema in CI.
 
 Runner, AWS provider, 10 `inspect` controls with moto tests.
 - [ ] Done: each control has pass and fail fixtures; permissions documented.
+      - [x] 8 of 10 controls have moto pass and fail fixtures (`tests/test_controls.py`), and each
+            test also checks that the control's AWS calls are within its declared permissions.
+      - [x] Permissions documented: `docs/iam-readonly.json`, generated and drift-tested;
+            `controlproof permissions` prints it.
+      - [ ] ac-6.2 and ia-2.1: blocked on OQ-7 (owner decision on the root-user data source).
+      - [ ] Real tier (ADR-0009 §1): no control has run against a real AWS account yet.
 - [x] ADR-0009 (M2 design) approved by the owner (2026-09-29).
 - [ ] Sandbox account and CI OIDC role provided by the owner (for the real tier). The owner has
       no AWS account yet (2026-09-29); controls are unit-tier verified only until then.
 - Build plan, tests first (unit tier first):
-  - [ ] Dependencies: boto3, typer; dev: moto, types-boto3.
-  - [ ] SPEC_NOTES for each call's response shape, errors and IAM action (ADR-0009 §9).
-  - [ ] Evidence recording and redaction, with the redaction test; `evidence-record` schema.
-  - [ ] AWS provider: session, account check, retries, typed errors, pagination.
-  - [ ] Runner: error isolation, partial-Region handling, empty-inventory observations.
-  - [ ] Profile and run record 1.1.0 (`regions`, `account`); built-in `aws-baseline` profile.
-  - [ ] Controls 1 to 10, each with moto pass and fail fixtures and a declared-permissions test.
-  - [ ] `docs/iam-readonly.json` generated, with a drift test.
-  - [ ] CLI: `run`, `permissions`, `--version`, `--json`, exit codes.
-  - [ ] Golden files from a moto run of `aws-baseline`.
+  - [x] Dependencies: boto3, typer; dev: moto, types-boto3.
+  - [x] SPEC_NOTES for each call's response shape, errors and IAM action (SPEC_NOTES §5.8).
+  - [x] Evidence recording and redaction, with the redaction test; `evidence-record` schema.
+  - [x] AWS provider: session, account check, retries, typed errors, pagination.
+  - [x] Runner: error isolation, partial-Region handling, empty-inventory observations.
+  - [x] Profile and run record 1.1.0 (`regions`, `account`); built-in `aws-baseline` profile.
+  - [ ] Controls 1 to 10: 8 built with moto pass and fail fixtures; ac-6.2 and ia-2.1 wait on OQ-7.
+  - [x] `docs/iam-readonly.json` generated, with a drift test.
+  - [x] CLI: `run`, `permissions`, `--version`, `--json`, exit codes.
+  - [x] Golden run `examples/runs/aws-baseline/`, replayed from a recording (ADR-0009 §10).
   - [ ] Real tier: `tests/integration/` against the sandbox; CI job wired to the OIDC role.
   - [ ] Remove the "no integration tests yet" exit-5 allowance from `make integration`.
 
@@ -106,8 +112,12 @@ Hardening buffer: fix defects, tighten docs, no new features.
 ## Last session
 
 - **Date:** 2026-09-29
-- **Changed:** M1 closed (CI run 36598001727 green). M2 design drafted as ADR-0009 (Proposed).
-- **Tests:** `make check` green, 116 tests.
-- **Not done:** M2 code. It waits for approval of ADR-0009 and the owner's sandbox details.
-- **Next step:** the owner reviews ADR-0009 (dependencies, CLI, redaction, test tiers) and
-  provides the sandbox account and CI role for the real tier.
+- **Changed:** M2 unit tier built: evidence recording and redaction, AWS provider (the only boto3
+  import), runner, 8 inspect controls, CLI (`run`, `permissions`, `--version`), read-only IAM policy,
+  run record and profile 1.1.0, `evidence-record` 1.0.0, record-and-replay golden run. SPEC_NOTES
+  §5.8 verifies every call from botocore's models, AWS's API docs and AWS's service reference.
+- **Tests:** `make check` green, 196 tests, 98% core coverage, 29 example files valid.
+- **Open for the owner:** OQ-7 (root-user data source for ac-6.2 and ia-2.1); a sandbox AWS
+  account for the real tier.
+- **Next step:** the owner answers OQ-7 and, when possible, provides a sandbox account. Then build
+  ac-6.2 and ia-2.1 and wire the real tier.

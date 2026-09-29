@@ -247,6 +247,21 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
   `get_ebs_encryption_by_default`, security groups, VPCs, flow logs, volumes; AWS Config recorder
   status; GuardDuty detectors; CloudWatch Logs `describe_log_groups`; RDS `describe_db_instances`;
   ACM certificates; STS `get_caller_identity`.
+- **Where moto differs from the AWS documentation** (moto 5.2.3, probes and tests 2026-09-29):
+  - GetBucketEncryption on a bucket with no explicit configuration raises
+    `ServerSideEncryptionConfigurationNotFoundError`, where real AWS applies SSE-S3 (§5.1). The
+    sc-28.1 control surfaces any such error as `error`.
+  - ListBuckets returns no `BucketRegion`, so bucket calls use the run's first Region.
+  - IAM ListUsers ignores the page size and returns every user in one page. Pagination is tested
+    with botocore's Stubber instead.
+  - GetEventSelectors on a new trail returns empty `EventSelectors` and `AdvancedEventSelectors`.
+    What real AWS returns for a trail created without custom selectors: UNVERIFIED, settled by the
+    real tier. The au-2 control requires an explicit all-management-events selector, so this can
+    only cause a false fail, never a false pass.
+  - A four-character bucket name (`logs`) fails CreateBucket with 404 in moto. Tests use longer
+    names.
+  - `generate_credential_report` works although the coverage file marks it unimplemented, and the
+    report has no root row (§5.8).
 - **Consequence:** `simulate` controls cannot be tested against moto, and the moto-backed CI
   demo cannot produce a real simulation result. They need a recorded-response test double
   (botocore's `Stubber`, part of botocore) (M3). Whether moto evaluates bucket policies on
