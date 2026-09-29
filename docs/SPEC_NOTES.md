@@ -36,6 +36,14 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
     `type` (enum `statement-id` or `objective-id`), `target-id` and `status`. `status` requires
     `state`, enum **`satisfied` or `not-satisfied` only**. Optional `status.reason` suggests
     `pass`, `fail` or `other`. There is no native "not assessed" or "error" state (see OQ-1).
+- **Other fields the mapper fills** (1.2.3 schemas; VERIFIED): a plan's `local-definitions` may
+  hold `activities`, and an `activity` requires `uuid` and `description` (optional `title`,
+  `props`, `related-controls`). A `back-matter` resource requires only `uuid` (optional `title`,
+  `description`). `relevant-evidence` requires `description`; `href` is optional. A result's
+  `local-definitions` may hold `inventory-items`, each requiring `uuid` and `description`. A
+  `subject-reference` requires `subject-uuid` and `type`, and suggests `component`,
+  `inventory-item`, `location`, `party`, `user` or `resource`. A `property` requires `name` and
+  `value`, and takes an optional `ns` for names outside OSCAL's own namespace.
 - **UUIDs:** `UUIDDatatype` accepts only version 4 ("random or pseudorandom") or version 5 UUIDs
   (pattern `...-[45]...`). Deterministic version 5 UUIDs are therefore valid. VERIFIED.
 - **Assessment-plan schema** (release asset `oscal_assessment-plan_schema.json`, 1.2.3, SHA-256
