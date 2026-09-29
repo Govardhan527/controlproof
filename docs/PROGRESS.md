@@ -8,8 +8,8 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
       template exist.
 - [x] Project docs exist: PROGRESS.md (full milestone list), DECISIONS.md, SPEC_NOTES.md,
       PARKED.md.
-- [x] ADR-0001 (licence), ADR-0002 (stack), ADR-0003 (output schema versioning) exist. Owner
-      approval is still pending on the items listed in ADR-0002, ADR-0003 and ADR-0004.
+- [x] ADR-0001 (licence), ADR-0002 (stack), ADR-0003 (output schema versioning) exist. All of
+      ADR-0001 to ADR-0004 are Accepted (owner approved 2026-09-29).
 - [x] SPEC_NOTES.md lists every spec source (OSCAL, SP 800-53, SP 800-53A, FedRAMP 20x KSIs, AWS
       APIs), with the primary URL and retrieval date, or `UNVERIFIED`.
 - [x] `make check` is green on the empty skeleton (2026-09-29: all unit tests pass, coverage 100%
@@ -77,6 +77,5 @@ Hardening buffer: fix defects, tighten docs, no new features.
   locally. `make integration` collects 0 tests (expected until M2).
 - **Commits:** `17df0ed` skeleton, `9612a9f` commit rules, `7ca1db4` output validator, `195467c`
   Makefile, `c26d26d` CI, `c957670` docs, `7f04fb4` status; pushed to `origin/main`.
-- **Not done:** ADR-0002 (A) items, ADR-0003 and ADR-0004 await owner approval.
-- **Next step:** the owner approves or amends the ADRs and answers OQ-1 to OQ-4 in
-  `docs/SPEC_NOTES.md`. Then M1 starts.
+- **Decisions:** the owner approved ADR-0002 (with its (A) items), ADR-0003 and ADR-0004.
+- **Next step:** the owner answers OQ-1 to OQ-4 in `docs/SPEC_NOTES.md`. Then M1 starts.

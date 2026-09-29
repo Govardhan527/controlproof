@@ -15,7 +15,7 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0002: Stack
 
-- **Date:** 2026-09-29. **Status:** Proposed. The owner approves or amends the items marked (A).
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29, including the (A) items).
 - **Context:** The stack was planned up front. The OSCAL version the output must validate
   against is pinned here.
 - **Core stack:** Python 3.12 (`.python-version`, `requires-python >=3.12`), uv, typer,
@@ -55,8 +55,8 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0003: Output schema versioning
 
-- **Date:** 2026-09-29. **Status:** Proposed (this defines output file formats, a public
-  interface, so the owner must approve).
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29; it defines output file
+  formats, a public interface).
 - **Context:** Every output format needs a JSON Schema that CI checks. Assessors and CI pipelines
   will parse the outputs, so changes must be visible and deliberate.
 - **Options:** (a) one tool version for everything; (b) an independent SemVer `schema_version` per
@@ -83,7 +83,7 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0004: Commit rules and how they are enforced
 
-- **Date:** 2026-09-29. **Status:** Proposed.
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29).
 - **Context:** Commits are authored by the owner alone, and their subjects should show which
   milestone each change serves. The rules must hold locally and in CI.
 - **Decision:**
