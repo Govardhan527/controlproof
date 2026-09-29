@@ -116,7 +116,12 @@ Hardening buffer: fix defects, tighten docs, no new features.
   import), runner, 8 inspect controls, CLI (`run`, `permissions`, `--version`), read-only IAM policy,
   run record and profile 1.1.0, `evidence-record` 1.0.0, record-and-replay golden run. SPEC_NOTES
   §5.8 verifies every call from botocore's models, AWS's API docs and AWS's service reference.
-- **Tests:** `make check` green, 196 tests, 98% core coverage, 29 example files valid.
+- **Tests:** `make check` green, 196 tests, 98% core coverage, 29 example files valid. CI run
+  36604971296 on `4aabe9a` green (195 tests; the local-only brief check is not in git).
+- **Incident, fixed:** the first M2 push failed CI. gitleaks flagged three synthetic key-shaped
+  strings in the redaction test, and a CLI test broke on colour codes. The strings are now built
+  at runtime, and `.gitleaksignore` lists only those three published findings by fingerprint
+  (ADR-0002 item 6 amendment).
 - **Open for the owner:** OQ-7 (root-user data source for ac-6.2 and ia-2.1); a sandbox AWS
   account for the real tier.
 - **Next step:** the owner answers OQ-7 and, when possible, provides a sandbox account. Then build
