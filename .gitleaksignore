@@ -1,0 +1,6 @@
+# Known false positives, ignored by exact fingerprint (commit:file:rule:line). Each is a
+# synthetic credential-shaped string in a redaction test, already in published history; the test
+# now builds such strings at runtime. Any other finding, in any file or commit, still fails CI.
+57e7a7b63c1090c8e84d5c5b040db76f68cf9b34:tests/test_evidence.py:aws-access-token:22
+57e7a7b63c1090c8e84d5c5b040db76f68cf9b34:tests/test_evidence.py:generic-api-key:14
+57e7a7b63c1090c8e84d5c5b040db76f68cf9b34:tests/test_evidence.py:generic-api-key:21

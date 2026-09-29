@@ -7,19 +7,22 @@ from datetime import UTC, datetime, timedelta, timezone
 import pytest
 
 from controlproof.canonical import iso, jsonable, parse_time
-from controlproof.evidence import ACCOUNT, REDACTED, EvidenceRecord, EvidenceStore, redact
+from controlproof.evidence import (
+    ACCOUNT,
+    REDACTED,
+    SECRET_FIELDS,
+    EvidenceRecord,
+    EvidenceStore,
+    redact,
+)
 
 T0 = datetime(2026, 9, 29, 12, 0, 0, tzinfo=UTC)
-SECRETS = {
-    "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYSYNTHETIC",
-    "SessionToken": "FwoGZXIvYXdzEBYaDSYNTHETICTOKEN",
-    "Password": "Synthetic-Passw0rd!",
-    "PrivateKey": "-----BEGIN PRIVATE KEY-----SYNTHETIC",
-    "CertificateBody": "-----BEGIN CERTIFICATE-----SYNTHETIC",
-    "CertificateChain": "-----BEGIN CERTIFICATE-----CHAIN",
-}
-ACCESS_KEY = "AKIAIOSFODNN7SYNTH1X"
-SESSION_KEY = "ASIAIOSFODNN7SYNTH2Y"
+# Secret fields are redacted by name, so their values only need to be unique, not realistic.
+SECRETS = {name: f"synthetic value {n}" for n, name in enumerate(sorted(SECRET_FIELDS))}
+# Key ids are redacted by pattern, so they are assembled here instead of written as literals that
+# a secret scanner would flag (tests are scanned by gitleaks in CI).
+ACCESS_KEY = "AKIA" + "SYNTHETICKEY0001"
+SESSION_KEY = "ASIA" + "SYNTHETICKEY0002"
 ACCOUNT_ID = "123456789012"
 
 
