@@ -40,6 +40,10 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
   6. **gitleaks runs from its release tarball** (v8.30.1, SHA-256 checked against the release's
      `checksums.txt`) instead of `gitleaks-action`. That keeps it independent of licence-key
      rules for organisation accounts and pinned without a third-party action.
+     *Amendment (2026-09-29):* `.gitleaksignore` lists three findings by exact fingerprint
+     (commit, file, rule, line): synthetic key-shaped strings in the redaction test of commit
+     `57e7a7b`, already published. The test now builds such strings at runtime. Every other
+     finding still fails CI, and new entries need owner approval.
   7. **pip-audit audits `uv export` output** (hashed requirements, `--disable-pip
      --require-hashes --strict`), so it audits exactly what `uv.lock` pins.
   8. **mypy covers `scripts/` as well as `src/`.**
