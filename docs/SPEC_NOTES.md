@@ -36,6 +36,8 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
     `type` (enum `statement-id` or `objective-id`), `target-id` and `status`. `status` requires
     `state`, enum **`satisfied` or `not-satisfied` only**. Optional `status.reason` suggests
     `pass`, `fail` or `other`. There is no native "not assessed" or "error" state (see OQ-1).
+- **Assessment-plan schema** (`oscal_assessment-plan_schema.json`, 1.2.3), needed for the
+  generated plan (ADR-0005): its required fields are UNVERIFIED, blocks M1.
 - **Format checking:** the schema uses JSON Schema `format` keywords. With `jsonschema`, formats
   such as `date-time` are only enforced when the optional format dependencies are installed.
   UNVERIFIED which formats the OSCAL schema uses and which ones jsonschema checks; this blocks M1.
@@ -81,14 +83,14 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
 - The OSCAL catalog in §2 carries the updated 5.2.0 procedures. Methods are encoded as parts named
   `assessment-method` with prop `method` (namespace `http://csrc.nist.gov/ns/rmf`) set to
   `EXAMINE`, `INTERVIEW` or `TEST`. VERIFIED.
-- **Proposed mapping of controlproof methods.** This is the tool's interpretation, not a NIST
-  statement. OPEN (OQ-3):
+- **Mapping of controlproof methods.** This is the tool's interpretation, not a NIST statement.
+  Decided 2026-09-29 (OQ-3, ADR-0005):
 
   | controlproof | 800-53A / OSCAL | Basis |
   |---|---|---|
   | `inspect` (read config) | EXAMINE | "reviewing, inspecting ... mechanisms" |
   | `exercise` (act on a tool-created resource) | TEST | "exercising ... mechanisms under specified conditions" |
-  | `simulate` (IAM policy simulation) | proposed EXAMINE | AWS says the simulator "does not perform the API operations" and results "can differ from your live AWS environment" (§5.2), so the mechanism is not exercised |
+  | `simulate` (IAM policy simulation) | EXAMINE | AWS says the simulator "does not perform the API operations" and results "can differ from your live AWS environment" (§5.2), so the mechanism is not exercised |
 
 ## 4. FedRAMP 20x Key Security Indicators (for the V2 mapping)
 
@@ -186,17 +188,19 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
 
 ## 6. Open questions
 
-- **OQ-1 (blocks M1): how to express `error` and `not_tested` in OSCAL.** A finding's
+OQ-1 to OQ-4 were decided by the owner on 2026-09-29, as proposed below (ADR-0005).
+
+- **OQ-1 (DECIDED 2026-09-29, ADR-0005): how to express `error` and `not_tested` in OSCAL.** A finding's
   `status.state` can only be `satisfied` or `not-satisfied`. 800-53A §3.3 allows "other than
   satisfied" when the assessor could not obtain enough information. Proposal: `pass` becomes
   `satisfied`/`pass`, `fail` becomes `not-satisfied`/`fail`, and `error` and `not_tested` become
   `not-satisfied` with reason `other` plus a controlproof-namespaced prop giving the exact
   status. The alternative is an observation without a finding.
-- **OQ-2 (blocks M1): `import-ap` is required.** Options: emit a minimal OSCAL assessment-plan
+- **OQ-2 (DECIDED 2026-09-29: generate a minimal plan; ADR-0005): `import-ap` is required.** Options: emit a minimal OSCAL assessment-plan
   per run and point `import-ap` at it, or point at an assessment plan the user supplies.
-- **OQ-3 (blocks M1): the `simulate` method mapping.** See the table in §3: EXAMINE (proposed)
-  or TEST.
-- **OQ-4 (blocks M1): finding target.** Proposal: `type: objective-id`, `target-id: <control>_obj`
+- **OQ-3 (DECIDED 2026-09-29: EXAMINE; ADR-0005): the `simulate` method mapping.** See the table
+  in §3.
+- **OQ-4 (DECIDED 2026-09-29, ADR-0005): finding target.** Proposal: `type: objective-id`, `target-id: <control>_obj`
   (for example `sc-28_obj`), using the part ids in §2.
 - **OQ-5 (blocks M4): the deliberate change for the M4 run-over-run demo.** The planned example
   (turning off default bucket encryption) cannot be done in real AWS (§5.1). It was only an

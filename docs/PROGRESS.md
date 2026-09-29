@@ -32,7 +32,7 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
 Data model, profile format, OSCAL output from 3 stub controls, validated against the official
 schema in CI.
 - [ ] Done: schema validation green; golden files committed.
-- [ ] Open questions OQ-1 to OQ-4 in `docs/SPEC_NOTES.md` answered by the owner (they block M1).
+- [x] Open questions OQ-1 to OQ-4 answered by the owner (2026-09-29, ADR-0005).
 - [ ] ADR-0002a (OSCAL models: compliance-trestle or datamodel-code-generator).
 - [ ] ADR recording the exact 25 controls.
 
@@ -78,4 +78,6 @@ Hardening buffer: fix defects, tighten docs, no new features.
 - **Commits:** `17df0ed` skeleton, `9612a9f` commit rules, `7ca1db4` output validator, `195467c`
   Makefile, `c26d26d` CI, `c957670` docs, `7f04fb4` status; pushed to `origin/main`.
 - **Decisions:** the owner approved ADR-0002 (with its (A) items), ADR-0003 and ADR-0004.
-- **Next step:** the owner answers OQ-1 to OQ-4 in `docs/SPEC_NOTES.md`. Then M1 starts.
+- **Decisions:** OQ-1 to OQ-4 answered as proposed (ADR-0005).
+- **Next step:** start M1 (data model, profile format, OSCAL output from 3 stub controls). First
+  verify the assessment-plan schema (SPEC_NOTES §1), then write ADR-0002a and the 25-control ADR.

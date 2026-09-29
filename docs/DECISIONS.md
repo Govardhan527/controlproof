@@ -104,3 +104,27 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 - **Consequence:** A local bypass (`--no-verify`) is still caught in CI. GitHub's default merge
   commit message ("Merge pull request #...") would fail `commit-hygiene` on `main`. A commit body
   line that starts with "Generated with" (for example about generated models) must be reworded.
+
+## ADR-0005: How results map into OSCAL assessment-results
+
+- **Date:** 2026-09-29. **Status:** Accepted (owner decided OQ-1 to OQ-4 on 2026-09-29).
+- **Context:** OSCAL 1.2.3 constrains how results can be expressed (SPEC_NOTES §1, §6). This
+  defines the OSCAL output, a public interface.
+- **Decision:**
+  1. **Status mapping (OQ-1).** `pass` becomes finding `status.state: satisfied` with reason
+     `pass`. `fail` becomes `not-satisfied` with reason `fail`. `error` and `not_tested` become
+     `not-satisfied` with reason `other`, plus a controlproof-namespaced prop carrying the exact
+     status. The prop's name and namespace URI are fixed in M1. Basis: SP 800-53A §3.3, where
+     "other than satisfied" also covers "unable to obtain sufficient information". A control that
+     could not run can therefore never read as satisfied.
+  2. **Assessment plan (OQ-2).** Each run also writes a minimal OSCAL assessment-plan (the
+     profile's controls and methods), and `import-ap` points to it. The `run` command needs no
+     extra input. The generated plan must validate against the official 1.2.3 assessment-plan
+     schema.
+  3. **Method mapping (OQ-3).** `inspect` is reported as `EXAMINE`, `simulate` as `EXAMINE`,
+     and `exercise` as `TEST` (SPEC_NOTES §3).
+  4. **Finding target (OQ-4).** `target.type: objective-id`, `target-id: <control>_obj` (for
+     example `sc-28_obj`), using part ids from the NIST SP 800-53 Rev 5.2.0 OSCAL catalog.
+- **Consequence:** An assessor can tell a real failure from a test that did not run by the
+  reason and the prop, and neither is counted as satisfied. M1 must add the assessment-plan
+  schema to SPEC_NOTES and vendor it next to the assessment-results schema.
