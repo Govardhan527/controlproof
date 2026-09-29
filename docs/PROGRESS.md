@@ -14,14 +14,16 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
       APIs), with the primary URL and retrieval date, or `UNVERIFIED`.
 - [x] `make check` is green on the empty skeleton (2026-09-29: all unit tests pass, coverage 100%
       of `src/`, 0 example files).
-- [ ] A test commit with a forbidden trailer is rejected by the hook, and
+- [x] A test commit with a forbidden trailer is rejected by the hook, and
       `scripts/check_commits.py` fails on a crafted bad range in a unit test.
       - [x] Unit test: `tests/test_check_commits.py::test_crafted_bad_range_fails` passes.
       - [x] Hook rejection shown in a scratch repo and in
             `tests/test_commit_msg_hook.py::test_hook_rejects_a_real_commit`.
-      - [ ] Hook rejection shown in this repo. Blocked until the git identity is configured:
-            git checks identity before it runs commit-msg.
-- [ ] M0 committed. Blocked on the same git identity.
+      - [x] Hook rejection shown in this repo (2026-09-29): a `Co-authored-by:` trailer and
+            the subject "Initial setup" were both rejected with "commit rejected:" and exit 1,
+            and no commit was created.
+- [x] M0 committed (2026-09-29): `17df0ed`..this commit on `main`. A clean clone passes
+      `make check`, and `scripts/check_commits.py` passes on `origin/main..HEAD`.
 - [ ] CI green on GitHub. Needs the M0 commits pushed (owner's call).
 
 ## M1 (week 2)
@@ -72,6 +74,9 @@ Hardening buffer: fix defects, tighten docs, no new features.
   primary sources.
 - **Tests:** `make check` green, `src/` coverage 100%. `pip-audit` and `gitleaks` clean when run
   locally. `make integration` collects 0 tests (expected until M2).
-- **Not done:** no commits yet (no git identity); hook demo in this repo; CI has not run on GitHub.
-- **Next step:** set the git identity, approve or amend ADR-0002 to ADR-0004, commit M0, show the
-  hook rejecting a commit in this repo, and push when the owner decides.
+- **Commits:** `17df0ed` skeleton, `9612a9f` commit rules, `7ca1db4` output validator, `195467c`
+  Makefile, `c26d26d` CI, `c957670` docs, then this status update. Not pushed.
+- **Not done:** CI has not run on GitHub (needs a push, the owner's call). ADR-0002 (A) items,
+  ADR-0003 and ADR-0004 await owner approval.
+- **Next step:** the owner pushes `main` and checks that CI is green, approves or amends the ADRs,
+  and answers OQ-1 to OQ-4 in `docs/SPEC_NOTES.md`. Then M1 starts.
