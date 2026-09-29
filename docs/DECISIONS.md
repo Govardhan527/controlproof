@@ -173,3 +173,100 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
   (`yaml.safe_load` only, never `yaml.load`) as runtime dependencies from M1.
 - **Consequence:** Two more packages in the SBOM and in the pip-audit scope. The OSCAL schemas
   stay byte-for-byte official.
+
+## ADR-0007: The 25 controls
+
+- **Date:** 2026-09-29. **Status:** Proposed (scope; the owner approves or amends).
+- **Context:** The MVP runs 25 controls from SP 800-53 Rev 5. `diff.py` keys results by control
+  id, so each id appears once. Ids are the lowercase OSCAL form (`ia-2.1` is IA-2(1)). All 25
+  exist and none is withdrawn in the Rev 5.2.0 catalog (SPEC_NOTES §2).
+- **Mapping basis:** "pack" means AWS's "Operational Best Practices for NIST 800-53 rev 5"
+  conformance pack maps that AWS Config rule to that control (SPEC_NOTES §5.6). "Statement" means
+  no AWS rule exists for it, so the check follows the control's own statement text. That is the
+  tool's interpretation.
+- **Proposal:** 15 `inspect` (the first 10 in M2, the other 5 in M3), 5 `simulate` and 5
+  `exercise` (M3).
+
+  | # | Control | Method | Passes when | AWS calls | Basis | moto |
+  |---|---|---|---|---|---|---|
+  | 1 | ac-2 Account Management | inspect | no IAM user's console password or active access key has gone unused longer than `max_unused_days` (default 90) | iam ListUsers, ListAccessKeys, GetAccessKeyLastUsed | pack: iam-user-unused-credentials-check | yes |
+  | 2 | ac-6.2 Non-privileged Access for Nonsecurity Functions | inspect | the root user has no access keys | iam GetAccountSummary | pack: iam-root-access-key-check | yes |
+  | 3 | ia-2.1 MFA to Privileged Accounts | inspect | the root user has MFA | iam GetAccountSummary | pack: root-account-mfa-enabled | yes |
+  | 4 | ia-2.2 MFA to Non-privileged Accounts | inspect | every IAM user with a console password has an MFA device | iam ListUsers, GetLoginProfile, ListMFADevices | pack: mfa-enabled-for-iam-console-access | yes |
+  | 5 | ia-5.1 Password-based Authentication | inspect | the account password policy meets the profile's parameters | iam GetAccountPasswordPolicy | pack: iam-password-policy | yes |
+  | 6 | sc-28 Protection of Information at Rest | inspect | EBS encryption by default is on in every profiled Region | ec2 GetEbsEncryptionByDefault | pack: ec2-ebs-encryption-by-default | yes |
+  | 7 | sc-28.1 Cryptographic Protection | inspect | every bucket's default encryption is SSE-KMS or DSSE-KMS | s3 ListBuckets, GetBucketEncryption | pack: s3-default-encryption-kms | yes |
+  | 8 | au-2 Event Logging | inspect | at least one multi-Region trail is logging read and write management events | cloudtrail DescribeTrails, GetTrailStatus, GetEventSelectors | pack: multi-region-cloudtrail-enabled | yes |
+  | 9 | si-7.1 Integrity Checks | inspect | every trail has log file validation on | cloudtrail DescribeTrails | pack: cloud-trail-log-file-validation-enabled | yes |
+  | 10 | sc-7 Boundary Protection | inspect | no security group allows 0.0.0.0/0 or ::/0 ingress on the profile's admin ports (default 22, 3389) | ec2 DescribeSecurityGroups | pack: restricted-ssh, restricted-common-ports | yes |
+  | 11 | ac-21 Information Sharing | inspect | all four account-level S3 Block Public Access settings are on | s3control GetPublicAccessBlock | pack: s3-account-level-public-access-blocks-periodic | yes |
+  | 12 | sc-12 Cryptographic Key Establishment and Management | inspect | every enabled symmetric customer managed KMS key rotates automatically | kms ListKeys, DescribeKey, GetKeyRotationStatus | pack: cmk-backing-key-rotation-enabled | yes |
+  | 13 | sc-8 Transmission Confidentiality and Integrity | inspect | every bucket policy denies requests where `aws:SecureTransport` is false | s3 ListBuckets, GetBucketPolicy | pack: s3-bucket-ssl-requests-only | yes |
+  | 14 | ac-17.2 Protection of Confidentiality and Integrity Using Encryption | inspect | every load balancer listener is HTTPS or TLS, or HTTP that only redirects to HTTPS | elbv2 DescribeLoadBalancers, DescribeListeners | pack: elb-tls-https-listeners-only, alb-http-to-https-redirection-check | yes |
+  | 15 | si-4 System Monitoring | inspect | a GuardDuty detector is enabled in every profiled Region | guardduty ListDetectors, GetDetector | pack: guardduty-enabled-centralized | yes |
+  | 16 | ac-6 Least Privilege | simulate | profile-listed workload principals are denied privilege-escalation actions (for example iam:CreateUser, iam:CreateAccessKey, iam:AttachRolePolicy, iam:PutRolePolicy) | iam SimulatePrincipalPolicy | statement | no: Stubber |
+  | 17 | ac-5 Separation of Duties | simulate | principals allowed to use a key (kms:Decrypt) are denied administering it (kms:ScheduleKeyDeletion, kms:PutKeyPolicy, kms:DisableKey) | iam SimulatePrincipalPolicy | statement (pack maps KMS-action rules to AC-5) | no: Stubber |
+  | 18 | ac-6.1 Authorize Access to Security Functions | simulate | only profile-listed security principals may disable security services (guardduty:DeleteDetector, config:StopConfigurationRecorder); the other listed principals are denied | iam SimulatePrincipalPolicy | statement | no: Stubber |
+  | 19 | au-9.4 Access by Subset of Privileged Users | simulate | only profile-listed audit admins may call cloudtrail:StopLogging, DeleteTrail, UpdateTrail, PutEventSelectors | iam SimulatePrincipalPolicy | statement | no: Stubber |
+  | 20 | cm-5 Access Restrictions for Change | simulate | non-designated principals are denied ec2:AuthorizeSecurityGroupIngress, s3:PutBucketPolicy, s3:PutBucketPublicAccessBlock | iam SimulatePrincipalPolicy | statement | no: Stubber |
+  | 21 | ac-3 Access Enforcement | exercise | attaching a public-read policy to a tool-created bucket is refused (account-level Block Public Access at work) | s3 CreateBucket, PutBucketTagging, PutBucketPolicy, DeleteBucket | pack: s3-account-level-public-access-blocks-periodic | enforcement UNVERIFIED |
+  | 22 | sc-13 Cryptographic Protection | exercise | writing an SSE-S3 (not KMS) object to a tool-created bucket is refused by an organisation guardrail | s3 CreateBucket, PutObject, DeleteObject, DeleteBucket | pack: s3-default-encryption-kms | no SCP evaluation |
+  | 23 | au-9 Protection of Audit Information | exercise | StopLogging on a tool-created trail is refused by a guardrail that protects all trails | cloudtrail CreateTrail, StopLogging, DeleteTrail (plus a tool-created delivery bucket) | pack: cloudtrail-enabled | yes, no SCP evaluation |
+  | 24 | au-12 Audit Record Generation | exercise | the tool's own CreateBucket call appears in CloudTrail within `max_wait_minutes` | cloudtrail LookupEvents | pack: cloudtrail-enabled | no: Stubber |
+  | 25 | sc-8.1 Cryptographic Protection | exercise | a tool-created HTTPS listener ends up with, or is only allowed, a policy without TLS 1.0 or 1.1 | elbv2, acm, ec2 create and delete | pack: elb-tls-https-listeners-only | yes |
+
+- **Left out of the originally listed examples:** `cm-6`, because AWS's mapping lists no rule for it (a
+  specific check can be assigned later), and `si-2`, which needs SSM patch compliance that moto
+  does not implement. IA-2, IA-5 and SC-8 are covered through `ia-2.1`, `ia-2.2`, `ia-5.1`, `sc-8`
+  and `sc-8.1`.
+- **Exercise safety:** every exercise creates only its own resources, tags them
+  `controlproof:run=<run-id>`, deletes them in `finally`, and never targets a pre-existing
+  resource. No exercise creates a KMS key, because a key cannot be deleted immediately (the
+  shortest deletion window is 7 days).
+- **Verification owed before each control is built** (SPEC_NOTES items, blocking M2 or M3): each
+  AWS response shape; whether moto enforces Block Public Access on PutBucketPolicy; the TLS
+  policy condition key an organisation guardrail would use (row 25); CloudTrail delivery delay
+  (row 24); how row 25 gets a certificate without a new dependency.
+- **Consequence:** M2 builds rows 1 to 10. M3 builds rows 11 to 25 and adds a recorded-response
+  test double for the rows moto cannot fake (SPEC_NOTES §5.7). Swapping a row later needs an ADR update.
+
+## ADR-0008: M1 data contracts and output layout
+
+- **Date:** 2026-09-29. **Status:** Proposed (public interfaces: profile format and output files).
+- **Profile** (YAML, loaded with `yaml.safe_load`, `schema_version` 1.0.0):
+
+  ```yaml
+  schema_version: "1.0.0"
+  id: aws-baseline
+  title: AWS baseline
+  provider: aws
+  controls:
+    - id: sc-28.1
+      params: {}
+  ```
+
+  Unknown keys, duplicate control ids and unknown control ids are load errors, never skipped.
+  Each control validates its own `params` with its own pydantic model.
+- **Data model** (pydantic v2, frozen): `Status` (pass, fail, error, not_tested), `Method`
+  (inspect, simulate, exercise), and `ControlResult` with exactly the planned fields
+  (control_id, method, status, observations, evidence_refs, started_at, ended_at,
+  tool_version). `Observation` has summary, subjects and evidence_refs. `RunRecord` has
+  schema_version, run_id, profile id, started_at, ended_at, tool_version and results.
+- **Run output**, one directory per run:
+  `run.json` (RunRecord), `assessment-results.json` and `assessment-plan.json` (OSCAL 1.2.3),
+  `manifest.json` (SHA-256 of every file in the run), and `evidence/` from M2 on.
+- **Determinism:** the clock is injected. `run_id` is the UTC start time
+  (`YYYYMMDDTHHMMSSZ`). Every OSCAL UUID is a version-5 UUID built from a fixed project
+  namespace UUID and `<run_id>/<kind>/<key>`. JSON keys and lists are sorted. The same inputs
+  give byte-identical files.
+- **OSCAL details for ADR-0005:** the exact-status prop is `name: controlproof-status`,
+  `ns: https://github.com/Govardhan527/controlproof/ns/oscal`, value `error` or `not_tested`.
+  Observed resources become `local-definitions.inventory-items` and are referenced from
+  `observations[].subjects`. The account is named in the plan's back-matter resource
+  (ADR-0005 item 5).
+- **Self-check:** `controlproof` validates each OSCAL file against the vendored official schema
+  before writing it, and refuses to write a file that fails.
+- **Not in M1:** the CLI (typer arrives with `run` in M2), the evidence bundle and redaction (M2),
+  the HTML report and diff (M4).
+- **Dev dependencies this needs:** `datamodel-code-generator` (ADR-0002a) and the typeshed stubs
+  `types-PyYAML` and `types-regex`, for `mypy --strict`.

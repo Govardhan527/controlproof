@@ -204,7 +204,16 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
 - DescribeTrails (multi-Region flag, `LogFileValidationEnabled`) and GetEventSelectors:
   UNVERIFIED, blocks M2.
 
-### 5.6 moto coverage (unit tests and the CI fake)
+### 5.6 AWS mapping of Config rules to SP 800-53 Rev 5
+- https://docs.aws.amazon.com/config/latest/developerguide/operational-best-practices-for-nist-800-53_rev_5.html
+  (HTML SHA-256 `6c612eb5f7a046ff33206eaebb6b7edbb45090ba1f9062dff646d4b3cf386f64`, parsed
+  locally). It has 928 rows mapping AWS Config rules to 113 controls. VERIFIED.
+- AWS's own caveat: "Conformance Packs, as sample templates, are not designed to fully ensure
+  compliance with a specific governance or compliance standard."
+- It is used only as the basis for the ADR-0007 mappings. It lists no rule for CM-6, AC-6, CM-5,
+  AU-9(4) or AC-6(1).
+
+### 5.7 moto coverage (unit tests and the CI fake)
 - Source: moto 5.2.3 (latest release on 2026-09-29), `IMPLEMENTATION_COVERAGE.md` at that tag.
   VERIFIED.
 - **Not implemented:** IAM `simulate_principal_policy`, `simulate_custom_policy` and

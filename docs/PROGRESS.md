@@ -32,9 +32,22 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
 Data model, profile format, OSCAL output from 3 stub controls, validated against the official
 schema in CI.
 - [ ] Done: schema validation green; golden files committed.
-- [x] Open questions OQ-1 to OQ-4 answered by the owner (2026-09-29, ADR-0005).
-- [ ] ADR-0002a (OSCAL models: compliance-trestle or datamodel-code-generator).
-- [ ] ADR recording the exact 25 controls.
+- [x] Open questions OQ-1 to OQ-4 and OQ-6 answered by the owner (2026-09-29, ADR-0005).
+- [x] ADR-0002a (OSCAL models): generated models, accepted 2026-09-29.
+- [x] ADR-0006 (runtime dependencies `regex`, `PyYAML`): accepted 2026-09-29.
+- [ ] ADR-0007 (the 25 controls): proposed, awaiting owner approval.
+- [ ] ADR-0008 (profile format, data model, output layout): proposed, awaiting owner approval.
+- Build plan once ADR-0008 is approved, tests first:
+  - [ ] Vendor the official 1.2.3 assessment-results and assessment-plan schemas under
+        `schemas/official/`, with a test that pins their SHA-256 (SPEC_NOTES §1).
+  - [ ] Official-schema validator (jsonschema plus a `regex`-backed `pattern` keyword), tested
+        with the valid minimal documents and the five rejected variants from SPEC_NOTES §1.
+  - [ ] Generation script and generated OSCAL models (ADR-0002a).
+  - [ ] Data model and profile loader (ADR-0008); JSON Schemas generated into `schemas/` with a
+        drift test (ADR-0003).
+  - [ ] OSCAL mapper for assessment-results and assessment-plan (ADR-0005, ADR-0008).
+  - [ ] 3 stub controls covering pass, fail and error, plus a `not_tested` case.
+  - [ ] Golden files in `examples/`, byte-stable, validated by the CI `schemas` job.
 
 ## M2 (weeks 3-4)
 
@@ -69,15 +82,12 @@ Hardening buffer: fix defects, tighten docs, no new features.
 ## Last session
 
 - **Date:** 2026-09-29
-- **Changed:** M0 skeleton: pyproject, uv.lock, Makefile, CI workflow (actions pinned by SHA),
-  commit-msg hook + `scripts/check_commits.py` + shared `scripts/commit_rules.py`,
-  `scripts/validate_outputs.py`, PR template, project docs, ADR-0001 to ADR-0004, SPEC_NOTES from
-  primary sources.
-- **Tests:** `make check` green, `src/` coverage 100%. `pip-audit` and `gitleaks` clean when run
-  locally. `make integration` collects 0 tests (expected until M2).
-- **Commits:** `17df0ed` skeleton, `9612a9f` commit rules, `7ca1db4` output validator, `195467c`
-  Makefile, `c26d26d` CI, `c957670` docs, `7f04fb4` status; pushed to `origin/main`.
-- **Decisions:** the owner approved ADR-0002 (with its (A) items), ADR-0003 and ADR-0004.
-- **Decisions:** OQ-1 to OQ-4 answered as proposed (ADR-0005).
-- **Next step:** start M1 (data model, profile format, OSCAL output from 3 stub controls). First
-  verify the assessment-plan schema (SPEC_NOTES §1), then write ADR-0002a and the 25-control ADR.
+- **Changed:** M0 finished and pushed (CI green: runs 36592992569 and 36593562138). M1 research:
+  assessment-plan schema, jsonschema cannot run OSCAL's `\p{L}` pattern (fixed with `regex` in a
+  probe), trestle versus generated models, moto coverage, AWS's 800-53 mapping. Decisions
+  recorded: ADR-0002a, ADR-0005 item 5 (OQ-6), ADR-0006. Proposed: ADR-0007 (25 controls) and
+  ADR-0008 (M1 contracts).
+- **Tests:** `make check` green; no product code changed since M0.
+- **Not done:** M1 code. It waits for approval of ADR-0007 and ADR-0008.
+- **Next step:** the owner approves or amends ADR-0007 and ADR-0008. Then build M1 in the order of
+  the build plan above.
