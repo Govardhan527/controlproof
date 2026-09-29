@@ -13,21 +13,28 @@ classifiers = [
 ]
 # Runtime dependencies are added in the milestone that first uses them (ADR-0002).
 dependencies = [
+    "boto3>=1.43",
     "jsonschema>=4.25",
     "pydantic>=2.12",
     "pyyaml>=6.0.2",
     "regex>=2025.9",
+    "typer>=0.27",
 ]
+
+[project.scripts]
+controlproof = "controlproof.cli:app"
 
 [dependency-groups]
 dev = [
     "datamodel-code-generator>=0.83",
+    "moto[cloudtrail,ec2,iam,s3,sts]>=5.2",
     "mypy>=1.18",
     "pip-audit>=2.9",
     "pytest>=8.4",
     "pytest-cov>=7.0",
     "pytest-socket>=0.7",
     "ruff>=0.13",
+    "types-boto3[cloudtrail,ec2,iam,s3,sts]>=1.43",
     "types-jsonschema>=4.25",
     "types-pyyaml>=6.0",
     "types-regex>=2025.9",
