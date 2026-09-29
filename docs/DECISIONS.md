@@ -176,7 +176,7 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0007: The 25 controls
 
-- **Date:** 2026-09-29. **Status:** Proposed (scope; the owner approves or amends).
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29).
 - **Context:** The MVP runs 25 controls from SP 800-53 Rev 5. `diff.py` keys results by control
   id, so each id appears once. Ids are the lowercase OSCAL form (`ia-2.1` is IA-2(1)). All 25
   exist and none is withdrawn in the Rev 5.2.0 catalog (SPEC_NOTES §2).
@@ -232,7 +232,8 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0008: M1 data contracts and output layout
 
-- **Date:** 2026-09-29. **Status:** Proposed (public interfaces: profile format and output files).
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29; public interfaces:
+  profile format and output files).
 - **Profile** (YAML, loaded with `yaml.safe_load`, `schema_version` 1.0.0):
 
   ```yaml

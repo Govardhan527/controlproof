@@ -35,9 +35,9 @@ schema in CI.
 - [x] Open questions OQ-1 to OQ-4 and OQ-6 answered by the owner (2026-09-29, ADR-0005).
 - [x] ADR-0002a (OSCAL models): generated models, accepted 2026-09-29.
 - [x] ADR-0006 (runtime dependencies `regex`, `PyYAML`): accepted 2026-09-29.
-- [ ] ADR-0007 (the 25 controls): proposed, awaiting owner approval.
-- [ ] ADR-0008 (profile format, data model, output layout): proposed, awaiting owner approval.
-- Build plan once ADR-0008 is approved, tests first:
+- [x] ADR-0007 (the 25 controls): accepted 2026-09-29.
+- [x] ADR-0008 (profile format, data model, output layout): accepted 2026-09-29.
+- Build plan, tests first:
   - [ ] Vendor the official 1.2.3 assessment-results and assessment-plan schemas under
         `schemas/official/`, with a test that pins their SHA-256 (SPEC_NOTES §1).
   - [ ] Official-schema validator (jsonschema plus a `regex`-backed `pattern` keyword), tested
