@@ -1,10 +1,40 @@
 import subprocess
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
 import pytest
+from moto import mock_aws
 
 GitRunner = Callable[..., str]
+REGION = "us-east-1"
+
+
+@pytest.fixture(autouse=True)
+def _no_real_aws(monkeypatch: pytest.MonkeyPatch, tmp_path_factory: pytest.TempPathFactory) -> None:
+    """Every test gets fake credentials and no real AWS config, so nothing can reach an account."""
+    empty = tmp_path_factory.mktemp("aws") / "none"
+    for name in (
+        "AWS_PROFILE",
+        "AWS_DEFAULT_PROFILE",
+        "AWS_REGION",
+        "AWS_ROLE_ARN",
+        "AWS_WEB_IDENTITY_TOKEN_FILE",
+    ):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("AWS_CONFIG_FILE", str(empty))
+    monkeypatch.setenv("AWS_SHARED_CREDENTIALS_FILE", str(empty))
+    monkeypatch.setenv("AWS_ACCESS_KEY_ID", "testing")
+    monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "testing")
+    monkeypatch.setenv("AWS_SESSION_TOKEN", "testing")
+    monkeypatch.setenv("AWS_DEFAULT_REGION", REGION)
+    monkeypatch.setenv("AWS_EC2_METADATA_DISABLED", "true")
+
+
+@pytest.fixture
+def moto() -> Iterator[None]:
+    """The moto fake AWS (ADR-0009 §1, unit tier)."""
+    with mock_aws():
+        yield
 
 
 @pytest.fixture
