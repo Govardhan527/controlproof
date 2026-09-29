@@ -62,9 +62,10 @@ schema in CI.
 
 Runner, AWS provider, 10 `inspect` controls with moto tests.
 - [ ] Done: each control has pass and fail fixtures; permissions documented.
-- [ ] ADR-0009 (M2 design) approved by the owner.
-- [ ] Sandbox account and CI OIDC role provided by the owner (for the real tier).
-- Build plan once ADR-0009 is approved, tests first:
+- [x] ADR-0009 (M2 design) approved by the owner (2026-09-29).
+- [ ] Sandbox account and CI OIDC role provided by the owner (for the real tier). The owner has
+      no AWS account yet (2026-09-29); controls are unit-tier verified only until then.
+- Build plan, tests first (unit tier first):
   - [ ] Dependencies: boto3, typer; dev: moto, types-boto3.
   - [ ] SPEC_NOTES for each call's response shape, errors and IAM action (ADR-0009 §9).
   - [ ] Evidence recording and redaction, with the redaction test; `evidence-record` schema.

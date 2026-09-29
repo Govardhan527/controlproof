@@ -285,8 +285,9 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0009: M2 design (runner, AWS provider, first 10 controls)
 
-- **Date:** 2026-09-29. **Status:** Proposed (dependencies, public interfaces and test tiers need
-  owner approval).
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29, including the stricter
+  done rule in §1). The unit tier is built first; the owner has no AWS account yet, so the real
+  tier waits for one.
 - **Scope:** ADR-0007 rows 1 to 10, all `inspect`: ac-2, ac-6.2, ia-2.1, ia-2.2, ia-5.1, sc-28,
   sc-28.1, au-2, si-7.1, sc-7. Done-criteria: each control has pass and fail fixtures; permissions
   documented. Nothing in M2 creates, changes or deletes an AWS resource.
