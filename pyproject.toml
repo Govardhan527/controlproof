@@ -67,6 +67,9 @@ select = [
 # The repo scripts and their tests drive git through subprocess on purpose.
 "scripts/*" = ["S603", "S607"]
 "tests/**" = ["S101", "S603", "S607"]
+# Generated OSCAL models (scripts/generate_oscal_models.py): long description strings, and
+# schema field names that trip the hardcoded-password heuristic.
+"src/controlproof/oscal/models/*" = ["E501", "S105"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -86,6 +89,8 @@ filterwarnings = ["error"]
 
 [tool.coverage.run]
 branch = true
+# Generated models are covered by import alone and would mask gaps in the core modules.
+omit = ["*/controlproof/oscal/models/*"]
 
 [tool.coverage.report]
 show_missing = true
