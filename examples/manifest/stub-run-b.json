@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256",
+  "files": {
+    "assessment-plan.json": "7ff741e7df703c6ce47a75f27b6fe38cca3a409807eab5ec7d7d304bb02387a2",
+    "assessment-results.json": "f0a0056fbcb9d3274f5a52cf2cd5d04eae72221c17379cfbaea1a087fc25ba7e",
+    "run.json": "ccc5482f4ebba992b14eaae152306fa71da6946ca4fab477b8c446558d6507ea"
+  },
+  "run_id": "20260930T120000Z",
+  "schema_version": "1.0.0"
+}
