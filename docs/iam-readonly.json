@@ -1,0 +1,26 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetEventSelectors",
+        "cloudtrail:GetTrailStatus",
+        "ec2:DescribeSecurityGroups",
+        "ec2:GetEbsEncryptionByDefault",
+        "iam:GetAccessKeyLastUsed",
+        "iam:GetAccountPasswordPolicy",
+        "iam:GetLoginProfile",
+        "iam:ListAccessKeys",
+        "iam:ListMFADevices",
+        "iam:ListUsers",
+        "s3:GetEncryptionConfiguration",
+        "s3:ListAllMyBuckets",
+        "sts:GetCallerIdentity"
+      ],
+      "Effect": "Allow",
+      "Resource": "*",
+      "Sid": "ControlproofReadOnly"
+    }
+  ],
+  "Version": "2012-10-17"
+}
