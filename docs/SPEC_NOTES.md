@@ -252,6 +252,65 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
   (botocore's `Stubber`, part of botocore) (M3). Whether moto evaluates bucket policies on
   `PutObject`, which the `exercise` examples depend on: UNVERIFIED, blocks M3.
 
+### 5.8 Calls used by the M2 controls (retrieved 2026-09-29)
+- **Response shapes, error names and pagination** come from AWS's machine-readable API models
+  shipped in botocore 1.43.104 (the locked version). VERIFIED:
+  - `iam.ListUsers`, `ListAccessKeys` and `ListMFADevices` paginate with `Marker`/`IsTruncated`.
+    `User` has `UserName`, `UserId`, `Arn`, `CreateDate`, `PasswordLastUsed` and others.
+    `AccessKeyMetadata` has `UserName`, `AccessKeyId`, `Status`, `CreateDate`.
+    `AccessKeyLastUsed` has `LastUsedDate` (optional), `ServiceName`, `Region`.
+  - `iam.GetAccountSummary` returns `SummaryMap`. Its valid keys include `AccountMFAEnabled`,
+    `AccountAccessKeysPresent` and `AccountPasswordPresent`.
+  - `iam.GetAccountPasswordPolicy` returns `PasswordPolicy` with `MinimumPasswordLength`,
+    `RequireSymbols`, `RequireNumbers`, `RequireUppercaseCharacters`,
+    `RequireLowercaseCharacters`, `MaxPasswordAge`, `PasswordReusePrevention` and others.
+  - `s3.ListBuckets` paginates with `ContinuationToken`. `Bucket` has `Name`, `CreationDate`,
+    `BucketRegion`, `BucketArn`. The `SSEAlgorithm` values are `AES256`, `aws:fsx`, `aws:backup`,
+    `aws:kms` and `aws:kms:dsse`.
+  - `ec2.GetEbsEncryptionByDefault` returns `EbsEncryptionByDefault` (boolean) and `SseType`.
+    `ec2.DescribeSecurityGroups` paginates with `NextToken`. `IpPermission` has `IpProtocol`,
+    `FromPort`, `ToPort`, `IpRanges` (`CidrIp`), `Ipv6Ranges` (`CidrIpv6`) and others.
+  - `cloudtrail.DescribeTrails` takes `trailNameList` and `includeShadowTrails` and returns
+    `trailList`. `Trail` has `IsMultiRegionTrail`, `HomeRegion`, `TrailARN`,
+    `LogFileValidationEnabled` and others. `GetTrailStatus` returns `IsLogging`.
+    `GetEventSelectors` returns `EventSelectors` (`ReadWriteType` of `ReadOnly`, `WriteOnly` or
+    `All`, and `IncludeManagementEvents`) and `AdvancedEventSelectors`.
+- **Behaviour** (AWS API reference). VERIFIED:
+  - GetLoginProfile: "If the user does not exist or does not have a password, the operation
+    returns a 404 (`NoSuchEntity`) error."
+  - GetAccountPasswordPolicy lists the error `NoSuchEntity` (404), meaning no custom policy is set.
+  - `User.PasswordLastUsed`: "If the field is null (no value), then it indicates that they never
+    signed in with a password", either because there was never a password or because it has not
+    been used "since IAM started tracking this information on October 20, 2014".
+  - `AccessKeyLastUsed.LastUsedDate` is null when the key "has not been used since IAM began
+    tracking this information" (April 22, 2015).
+  - DescribeTrails: `includeShadowTrails` defaults to true. With no `trailNameList`, it returns
+    "all trails in the current Region and any associated shadow trails in other Regions".
+- **IAM action for each call**, from AWS's machine-readable service reference
+  (`https://servicereference.us-east-1.amazonaws.com/v1/<service>/<service>.json`, the
+  `Operations[].AuthorizedActions` field). VERIFIED. None is classified `IsWrite`:
+  - iam: ListUsers, GetLoginProfile, ListAccessKeys, GetAccessKeyLastUsed, ListMFADevices,
+    GetAccountSummary, GetAccountPasswordPolicy, GenerateCredentialReport,
+    GetCredentialReport (each authorised by the action of the same name).
+  - s3: ListBuckets needs `s3:ListAllMyBuckets`; GetBucketEncryption needs
+    `s3:GetEncryptionConfiguration`; GetBucketLocation needs `s3:GetBucketLocation`.
+  - ec2: GetEbsEncryptionByDefault, DescribeSecurityGroups. cloudtrail: DescribeTrails,
+    GetTrailStatus, GetEventSelectors. sts: GetCallerIdentity.
+- **Password policy thresholds:** the AWS Config managed rule `iam-password-policy` defaults to
+  uppercase, lowercase, symbols and numbers all required, `MinimumPasswordLength` 14,
+  `PasswordReusePrevention` 24 and `MaxPasswordAge` 90. Its documented caveat: the rule "is marked
+  as NON_COMPLIANT when the default IAM password policy is used". VERIFIED.
+- **Root user credential status (OPEN, OQ-7):** no primary AWS source defines what the
+  `GetAccountSummary` keys `AccountMFAEnabled` and `AccountAccessKeysPresent` mean. The IAM
+  credential report does define its columns (`mfa_active`, `access_key_1_active`, ...), states
+  that key columns "apply to both account root user and IAM users", and can be regenerated at most
+  every four hours. `GenerateCredentialReport` overwrites the single stored report. moto 5.2.3's
+  report has no root row, and its summary reports `AccountMFAEnabled` 0. Blocks ac-6.2 and
+  ia-2.1.
+- **GetBucketEncryption errors:** the S3 error-code page could not be retrieved (it now
+  redirects). The control therefore treats any error from this call as `error`, never as `fail`
+  or `pass`.
+
 ## 6. Open questions
 
 OQ-1 to OQ-4 and OQ-6 were decided by the owner on 2026-09-29, as proposed below (ADR-0005).
@@ -278,6 +337,12 @@ OQ-1 to OQ-4 and OQ-6 were decided by the owner on 2026-09-29, as proposed below
   required (§1), and controlproof has no SSP. Options: (a) point it at a back-matter resource
   inside the plan that states no SSP was supplied and names the assessed account; (b) let the
   profile name an SSP href and fall back to (a) when it does not.
+- **OQ-7 (blocks ac-6.2 and ia-2.1): the source for root user MFA and root access keys.**
+  (a) `GetAccountSummary` keys `AccountMFAEnabled` and `AccountAccessKeysPresent`: one call, and
+  moto supports it, but AWS does not document what the keys mean. (b) The IAM credential report:
+  documented columns including the root user, but it needs `GenerateCredentialReport` (which
+  overwrites the stored report), returns data up to four hours old, and moto's report has no root
+  row, so unit tests would use recorded responses.
 
 ## 7. Plain-word explainers
 
