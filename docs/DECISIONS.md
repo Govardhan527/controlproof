@@ -282,3 +282,107 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
   the HTML report and diff (M4).
 - **Dev dependencies this needs:** `datamodel-code-generator` (ADR-0002a) and the typeshed stubs
   `types-PyYAML` and `types-regex`, for `mypy --strict`.
+
+## ADR-0009: M2 design (runner, AWS provider, first 10 controls)
+
+- **Date:** 2026-09-29. **Status:** Proposed (dependencies, public interfaces and test tiers need
+  owner approval).
+- **Scope:** ADR-0007 rows 1 to 10, all `inspect`: ac-2, ac-6.2, ia-2.1, ia-2.2, ia-5.1, sc-28,
+  sc-28.1, au-2, si-7.1, sc-7. Done-criteria: each control has pass and fail fixtures; permissions
+  documented. Nothing in M2 creates, changes or deletes an AWS resource.
+
+### 1. Real data, real environment
+- The shipped tool only ever calls real AWS APIs through boto3, with the caller's own
+  credentials. Nothing in the package fakes or stubs a response. The M1 stub controls live in
+  `tests/`, are never packaged, and stop being the source of the golden files in M2.
+- Tests run in two tiers:
+  - **Unit tier** (every push, no credentials, no cost): moto, the fake AWS that the plan
+    requires for unit tests and for the CI run of the success test. It proves the control logic
+    against known pass and fail states. It is not proof that real AWS behaves the same, because
+    moto is a re-implementation.
+  - **Real tier** (`integration`, on `main` and manual dispatch): the same controls against a
+    dedicated AWS sandbox account. This tier proves real behaviour.
+- **Proposed strengthening:** a control counts as done only after it has passed both tiers,
+  meaning it returns a pass or fail with evidence, never an error, against the real sandbox. The
+  original M2 done-criteria ask only for the moto fixtures.
+- The owner provides the real tier: a dedicated sandbox account (never production), local
+  credentials through the normal AWS profile or SSO, and for CI a GitHub OIDC role in the sandbox
+  that trusts only this repository's `main` branch and carries `docs/iam-readonly.json`. No
+  long-lived keys are stored anywhere. The account id lives in a repository variable, not in git.
+- The sandbox's expected result per control is kept in `tests/integration/sandbox-expected.yaml`
+  (control id to status only, no account data). The real tier checks results against it.
+
+### 2. New dependencies
+- Runtime: `boto3` (1.43.104, Apache-2.0) and `typer` (0.27.2, MIT, the planned CLI library).
+- Dev: `moto` (5.2.3, Apache-2.0) and `types-boto3` (1.43.104, MIT, typed clients for
+  `mypy --strict`).
+
+### 3. CLI (public interface)
+```
+controlproof run --profile NAME|PATH --account ACCOUNT_ID [--region REGION]... [--out DIR] [--json]
+controlproof permissions [--profile NAME|PATH] [--json]
+controlproof --version
+```
+- `--profile` takes a built-in profile name (`aws-baseline`, shipped as package data, rows 1 to 10
+  in M2 and all 25 by M3) or a path.
+- `--account` must equal the account of the credentials (`sts:GetCallerIdentity`). Otherwise the
+  run stops before any control runs.
+- `--out` defaults to `./controlproof-runs`. `--json` prints a summary (run id, run directory,
+  count per status, status per control) instead of text.
+- Exit codes: 0 every control passed; 1 at least one fail and no error; 2 at least one error or
+  not tested; 3 the run could not start (bad profile, account mismatch, no credentials).
+- `--allow-exercise` is added in M3, not before.
+
+### 4. Profile and run record changes (schema 1.1.0, MINOR under ADR-0003)
+- Profile gains an optional `regions` list. `--region` overrides it. With neither, the run uses the
+  SDK's configured default region.
+- The run record gains `account` and `regions`, so each run states exactly where it looked.
+
+### 5. AWS provider (`providers/aws.py`, the only module that imports boto3)
+- The session comes from the standard credential chain. No key ever passes through a CLI flag.
+- Retries use botocore's standard mode. A throttle that outlasts the retries, an AccessDenied or
+  any other AWS error becomes a typed `ProviderError` naming the call and the error code.
+- Every response is recorded as evidence before a control sees it. Paginated calls read every
+  page.
+
+### 6. Evidence and redaction (public interface: evidence file format)
+- Each API response becomes `evidence/<sha256>.json`: service, operation, region, redacted request
+  parameters, redacted response, collected time. The hash covers the redacted bytes. The manifest
+  lists every evidence file, and OSCAL `relevant-evidence` gains `href: evidence/<sha256>.json`.
+  The format `evidence-record` (1.0.0) gets its own JSON Schema.
+- Redaction runs before hashing:
+  - values of exact secret field names (`SecretAccessKey`, `SessionToken`, `Password`,
+    `PrivateKey`, `CertificateBody`, `CertificateChain`) become `[REDACTED]`;
+  - access key ids (`AKIA...`, `ASIA...`) keep only their last 4 characters (`[KEY:...ABCD]`), so
+    two keys can still be told apart;
+  - 12-digit account ids, standalone or inside ARNs, become `[ACCOUNT]`. The account is named once,
+    in the run record and the plan.
+  - Field names such as `PasswordLastUsed` or `MinimumPasswordLength` are kept, because the
+    controls need them. Matching is by exact name and value pattern, never by substring.
+- A test feeds synthetic responses containing each secret type through the pipeline and asserts
+  that none survives.
+
+### 7. Runner (`runner.py`)
+- Load the profile, validate each control's params, check the account, run the controls in id
+  order with the injected clock, then write the run (M1 writer).
+- Any `ProviderError`, and any other exception from a control, becomes `error`, never `pass`. The
+  runner is the only place allowed to catch a broad exception, and it records the exception type.
+- If one Region fails, the whole control is `error`. Partial data never produces a pass.
+- **No resources to check:** a control is `pass` only with an observation saying what was checked
+  and that nothing was found (for example "no S3 buckets in us-east-1"). The empty response is the
+  evidence. A control whose rule needs something to exist (au-2: at least one trail) fails when
+  it is absent.
+
+### 8. Permissions
+- `docs/iam-readonly.json` is generated from the permissions each control declares, plus
+  `sts:GetCallerIdentity`, with a drift test.
+- A unit test records every AWS call each control makes under moto and fails if any call's IAM
+  action is not in that control's declared permissions.
+
+### 9. Verification owed before each control is written (SPEC_NOTES)
+- The response shape and error codes of every call used, including the "not set" cases:
+  GetAccountPasswordPolicy and GetLoginProfile return NoSuchEntity; GetBucketEncryption on a
+  bucket with only the base SSE-S3 behaviour.
+- The IAM action name for every call (AWS Service Authorization Reference).
+- Whether moto can seed its random resource ids, which golden files from moto runs need.
+  Otherwise the golden test normalises generated ids.

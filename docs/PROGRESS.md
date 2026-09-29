@@ -62,7 +62,21 @@ schema in CI.
 
 Runner, AWS provider, 10 `inspect` controls with moto tests.
 - [ ] Done: each control has pass and fail fixtures; permissions documented.
-- [ ] Remove the "no integration tests yet" exit-5 allowance from `make integration`.
+- [ ] ADR-0009 (M2 design) approved by the owner.
+- [ ] Sandbox account and CI OIDC role provided by the owner (for the real tier).
+- Build plan once ADR-0009 is approved, tests first:
+  - [ ] Dependencies: boto3, typer; dev: moto, types-boto3.
+  - [ ] SPEC_NOTES for each call's response shape, errors and IAM action (ADR-0009 §9).
+  - [ ] Evidence recording and redaction, with the redaction test; `evidence-record` schema.
+  - [ ] AWS provider: session, account check, retries, typed errors, pagination.
+  - [ ] Runner: error isolation, partial-Region handling, empty-inventory observations.
+  - [ ] Profile and run record 1.1.0 (`regions`, `account`); built-in `aws-baseline` profile.
+  - [ ] Controls 1 to 10, each with moto pass and fail fixtures and a declared-permissions test.
+  - [ ] `docs/iam-readonly.json` generated, with a drift test.
+  - [ ] CLI: `run`, `permissions`, `--version`, `--json`, exit codes.
+  - [ ] Golden files from a moto run of `aws-baseline`.
+  - [ ] Real tier: `tests/integration/` against the sandbox; CI job wired to the OIDC role.
+  - [ ] Remove the "no integration tests yet" exit-5 allowance from `make integration`.
 
 ## M3 (weeks 5-6)
 
@@ -91,13 +105,8 @@ Hardening buffer: fix defects, tighten docs, no new features.
 ## Last session
 
 - **Date:** 2026-09-29
-- **Changed:** M1 built: validator (`regex`-backed patterns, including the metaschema check),
-  vendored OSCAL 1.2.3 schemas, generated OSCAL models, data model, profile loader, control base,
-  OSCAL mapper, run writer with manifest, project JSON Schemas, 3 stub controls, golden files.
-  ADR-0002a implementation note and ADR-0003 amendment (schemas live in the package).
-- **Found:** jsonschema does not check `uri` or `uri-reference` formats with the installed packages
-  (SPEC_NOTES §1, parked).
-- **Tests:** `make check` green locally, 116 tests, 99% core coverage, 8 examples valid.
-- **CI:** run 36598001727 on `bca8d92` green (115 tests, 99.69% coverage, 8 examples valid).
-- **Next step:** M2: runner, AWS provider, `inspect` rows 1 to
-  10 of ADR-0007 with moto pass and fail fixtures, evidence redaction, the CLI (`run`).
+- **Changed:** M1 closed (CI run 36598001727 green). M2 design drafted as ADR-0009 (Proposed).
+- **Tests:** `make check` green, 116 tests.
+- **Not done:** M2 code. It waits for approval of ADR-0009 and the owner's sandbox details.
+- **Next step:** the owner reviews ADR-0009 (dependencies, CLI, redaction, test tiers) and
+  provides the sandbox account and CI role for the real tier.
