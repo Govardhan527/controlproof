@@ -80,6 +80,11 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
   assessment-plan schemas by a committed script (`datamodel-code-generator` as a dev dependency,
   `--output-model-type pydantic_v2.BaseModel` and the `--type-mappings` above). The generated
   files are committed and every emitted document is still validated against the official schema.
+- **Implementation note (2026-09-29):** the generated classes wrap each value in a root model
+  and have generated names (for example `Timing2`), so the mapper builds plain JSON and loads it
+  through the generated model. That load rejects unknown or misspelt fields. The model's dump is
+  what gets written, after the official-schema check. The generated modules are left out of
+  coverage (they are fully covered by import) and have their own ruff ignores.
 
 ## ADR-0003: Output schema versioning
 
@@ -108,6 +113,12 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
     `1.0.0`.
 - **Consequence:** A consumer can tell from `schema_version` whether it can read a file. Drift
   between models and schemas fails CI. Bumps are rare and deliberate.
+- **Amendment (2026-09-29, M1):** schemas live in the package, at
+  `src/controlproof/schemas/<format>.schema.json` and
+  `src/controlproof/schemas/official/<format>.schema.json`, so the installed tool can validate
+  its own output. A format needs at least one of the two; the OSCAL formats have only the
+  official one. The official files are byte-identical to the NIST release assets, and a test
+  pins their SHA-256.
 
 ## ADR-0004: Commit rules and how they are enforced
 

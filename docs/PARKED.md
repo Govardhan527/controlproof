@@ -10,3 +10,6 @@ waits.
   gitleaks is not installed locally. It could be added once gitleaks is installed.
 - **2026-09-29, M0 setup: `uv audit`.** uv 0.12.9 has `uv audit`, which could replace pip-audit and
   its dependencies. pip-audit is the planned tool, so this waits for an owner decision.
+- **2026-09-29, M1: check `uri` and `uri-reference` formats.** jsonschema only checks them when
+  optional packages are installed (for example `rfc3986-validator`). Today the only hrefs
+  controlproof writes are fixed strings. Adding the packages needs owner approval.

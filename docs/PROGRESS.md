@@ -32,22 +32,30 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
 Data model, profile format, OSCAL output from 3 stub controls, validated against the official
 schema in CI.
 - [ ] Done: schema validation green; golden files committed.
+      - [x] Locally (2026-09-29): `make check` green, 116 tests, 99% core coverage; the `schemas`
+            step validates 8 example files against the official OSCAL 1.2.3 schemas and the
+            project schemas. Each M1 commit also passed `make check` in a clean worktree.
+      - [x] Golden files committed: `examples/<format>/stub-run-a.json` and `stub-run-b.json`
+            (`2f53039`).
+      - [ ] Green in CI on GitHub. Needs a push (owner's call).
 - [x] Open questions OQ-1 to OQ-4 and OQ-6 answered by the owner (2026-09-29, ADR-0005).
 - [x] ADR-0002a (OSCAL models): generated models, accepted 2026-09-29.
 - [x] ADR-0006 (runtime dependencies `regex`, `PyYAML`): accepted 2026-09-29.
 - [x] ADR-0007 (the 25 controls): accepted 2026-09-29.
 - [x] ADR-0008 (profile format, data model, output layout): accepted 2026-09-29.
 - Build plan, tests first:
-  - [ ] Vendor the official 1.2.3 assessment-results and assessment-plan schemas under
-        `schemas/official/`, with a test that pins their SHA-256 (SPEC_NOTES §1).
-  - [ ] Official-schema validator (jsonschema plus a `regex`-backed `pattern` keyword), tested
-        with the valid minimal documents and the five rejected variants from SPEC_NOTES §1.
-  - [ ] Generation script and generated OSCAL models (ADR-0002a).
-  - [ ] Data model and profile loader (ADR-0008); JSON Schemas generated into `schemas/` with a
-        drift test (ADR-0003).
-  - [ ] OSCAL mapper for assessment-results and assessment-plan (ADR-0005, ADR-0008).
-  - [ ] 3 stub controls covering pass, fail and error, plus a `not_tested` case.
-  - [ ] Golden files in `examples/`, byte-stable, validated by the CI `schemas` job.
+  - [x] Vendored the official 1.2.3 schemas with a SHA-256 test (`18cdcf9`).
+  - [x] Official-schema validator with a `regex`-backed `pattern` keyword and metaschema check,
+        tested with valid documents and five rejected variants (`18cdcf9`).
+  - [x] Generation script, generated OSCAL models and a drift test (`fb497b7`).
+  - [x] Data model, profile loader and control base (`fbd9219`); JSON Schemas generated into
+        `src/controlproof/schemas/` with a drift test (`1b43b40`).
+  - [x] OSCAL mapper for assessment-results and assessment-plan, and the run writer with its
+        manifest and self-check (`1b43b40`).
+  - [x] 3 stub controls (`tests/stub_controls.py`) covering pass, fail, error and not tested.
+  - [x] Golden files in `examples/`, byte-stable, validated by the `schemas` step (`2f53039`).
+- Carried to M2: evidence files under `evidence/` with redaction, and `href`s from
+  `relevant-evidence` to them (M1 cites evidence by SHA-256 in the description only).
 
 ## M2 (weeks 3-4)
 
@@ -82,12 +90,13 @@ Hardening buffer: fix defects, tighten docs, no new features.
 ## Last session
 
 - **Date:** 2026-09-29
-- **Changed:** M0 finished and pushed (CI green: runs 36592992569 and 36593562138). M1 research:
-  assessment-plan schema, jsonschema cannot run OSCAL's `\p{L}` pattern (fixed with `regex` in a
-  probe), trestle versus generated models, moto coverage, AWS's 800-53 mapping. Decisions
-  recorded: ADR-0002a, ADR-0005 item 5 (OQ-6), ADR-0006. Proposed: ADR-0007 (25 controls) and
-  ADR-0008 (M1 contracts).
-- **Tests:** `make check` green; no product code changed since M0.
-- **Not done:** M1 code. It waits for approval of ADR-0007 and ADR-0008.
-- **Next step:** the owner approves or amends ADR-0007 and ADR-0008. Then build M1 in the order of
-  the build plan above.
+- **Changed:** M1 built: validator (`regex`-backed patterns, including the metaschema check),
+  vendored OSCAL 1.2.3 schemas, generated OSCAL models, data model, profile loader, control base,
+  OSCAL mapper, run writer with manifest, project JSON Schemas, 3 stub controls, golden files.
+  ADR-0002a implementation note and ADR-0003 amendment (schemas live in the package).
+- **Found:** jsonschema does not check `uri` or `uri-reference` formats with the installed packages
+  (SPEC_NOTES §1, parked).
+- **Tests:** `make check` green locally, 116 tests, 99% core coverage, 8 examples valid.
+- **Not done:** CI has not run on the M1 commits (not pushed).
+- **Next step:** push, confirm CI green, tick M1. Then M2: runner, AWS provider, `inspect` rows 1 to
+  10 of ADR-0007 with moto pass and fail fixtures, evidence redaction, the CLI (`run`).

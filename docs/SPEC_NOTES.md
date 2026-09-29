@@ -49,8 +49,13 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
     `oscal-version`.
 - **Formats and patterns:** the assessment-results schema uses the `format` values `date-time`,
   `email`, `uri` and `uri-reference`. `DateTimeWithTimezoneDatatype` also carries a regex
-  `pattern`, so a missing timezone is rejected whether or not formats are checked. Which formats
-  jsonschema checks without optional packages: UNVERIFIED, blocks M1. VERIFIED otherwise.
+  `pattern`, so a missing timezone is rejected whether or not formats are checked. VERIFIED.
+- **Which formats are actually checked** (jsonschema 4.26.0 with the locked packages, probe
+  2026-09-29): the draft-07 format checker covers `date`, `email`, `idn-email`, `idn-hostname`,
+  `ipv4`, `ipv6` and `regex`. So of OSCAL's four, only `email` is checked; `date-time` is still
+  enforced by its pattern. **`uri` and `uri-reference` are not checked**: the probe accepted
+  `::not a uri` as a `uri-reference`. controlproof's own hrefs are fixed strings, so the risk is
+  low; closing the gap needs extra packages (see PARKED.md).
 - **Python cannot run one OSCAL pattern as-is.** `TokenDatatype` uses
   `^(\p{L}|_)(\p{L}|\p{N}|[.\-_])*$`. Python's `re` module rejects `\p` ("bad escape"), so
   jsonschema 4.26.0 raises `re.error` on any OSCAL document instead of validating it (probe
@@ -59,6 +64,11 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
   assessment-plan documents validated, and the probe rejected a bad token, a version-1 UUID, a
   timestamp without timezone, a missing `import-ap` and a finding state `error`. This is an
   experiment result, not a spec statement.
+- **The official schema also fails jsonschema's own schema check.** `check_schema` validates each
+  `pattern` value as a `regex` format with Python's `re`, so it rejects the OSCAL schema before
+  any document is looked at. `controlproof.validation.build_validator` therefore checks schemas
+  with a format checker whose `regex` format uses the `regex` package. VERIFIED by
+  `tests/test_validation.py`.
 
 ## 2. NIST SP 800-53 Rev 5: control identifiers
 
