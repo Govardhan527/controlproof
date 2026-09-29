@@ -30,6 +30,8 @@ def run(*results: ControlResult) -> RunRecord:
     return RunRecord(
         run_id="20260929T120000Z",
         profile_id="p",
+        account="123456789012",
+        regions=("us-east-1",),
         started_at=T0,
         ended_at=T0 + timedelta(minutes=1),
         tool_version="0.0.0",
@@ -110,8 +112,27 @@ def test_a_run_cannot_end_before_it_starts() -> None:
         RunRecord(
             run_id="20260929T120000Z",
             profile_id="p",
+            account="123456789012",
+            regions=("us-east-1",),
             started_at=T0,
             ended_at=T0 - timedelta(seconds=1),
             tool_version="0.0.0",
             results=(),
         )
+
+
+@pytest.mark.parametrize(("field", "value"), [("account", "12345"), ("regions", ())])
+def test_a_run_names_a_real_account_and_at_least_one_region(field: str, value: object) -> None:
+    fields: dict[str, Any] = {
+        "run_id": "20260929T120000Z",
+        "profile_id": "p",
+        "account": "123456789012",
+        "regions": ("us-east-1",),
+        "started_at": T0,
+        "ended_at": T0,
+        "tool_version": "0.0.0",
+        "results": (),
+        field: value,
+    }
+    with pytest.raises(ValidationError):
+        RunRecord(**fields)

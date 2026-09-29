@@ -1,0 +1,22 @@
+{
+  "collected_at": "2026-09-29T12:00:15Z",
+  "error": null,
+  "operation": "GetTrailStatus",
+  "region": "us-east-1",
+  "request": {
+    "Name": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+  },
+  "response": {
+    "IsLogging": true,
+    "LatestDeliveryAttemptSucceeded": "",
+    "LatestDeliveryAttemptTime": "2026-09-29T17:10:27Z",
+    "LatestDeliveryTime": "2026-09-29T11:40:27Z",
+    "LatestNotificationAttemptSucceeded": "",
+    "LatestNotificationAttemptTime": "",
+    "StartLoggingTime": "2026-09-29T11:40:27Z",
+    "TimeLoggingStarted": "2026-09-29T17:10:27Z",
+    "TimeLoggingStopped": ""
+  },
+  "schema_version": "1.0.0",
+  "service": "cloudtrail"
+}

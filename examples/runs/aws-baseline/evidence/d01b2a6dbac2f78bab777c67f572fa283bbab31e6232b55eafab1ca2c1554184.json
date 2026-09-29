@@ -1,0 +1,18 @@
+{
+  "collected_at": "2026-09-29T12:00:06Z",
+  "error": null,
+  "operation": "GetLoginProfile",
+  "region": null,
+  "request": {
+    "UserName": "bob"
+  },
+  "response": {
+    "LoginProfile": {
+      "CreateDate": "2026-09-29T17:10:25.679807Z",
+      "PasswordResetRequired": false,
+      "UserName": "bob"
+    }
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

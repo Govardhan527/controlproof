@@ -1,0 +1,243 @@
+{
+  "assessment-plan": {
+    "back-matter": {
+      "resources": [
+        {
+          "description": "controlproof ran without a system security plan. Assessed AWS account: 123456789012; Regions: us-east-1.",
+          "title": "No system security plan supplied",
+          "uuid": "5d87a5f2-747d-598d-8e53-2267a0ee09af"
+        }
+      ]
+    },
+    "import-ssp": {
+      "href": "#5d87a5f2-747d-598d-8e53-2267a0ee09af"
+    },
+    "local-definitions": {
+      "activities": [
+        {
+          "description": "controlproof control test for ac-2 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "ac-2"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "ac-2 Account Management",
+          "uuid": "6cfcc570-34da-5681-91c5-382f44803370"
+        },
+        {
+          "description": "controlproof control test for au-2 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "au-2"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "au-2 Event Logging",
+          "uuid": "56645549-12b0-5ef7-8318-3962a39e48c0"
+        },
+        {
+          "description": "controlproof control test for ia-2.2 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "ia-2.2"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "ia-2.2 Multi-factor Authentication to Non-privileged Accounts",
+          "uuid": "0b5b5a7c-ee54-5ad1-af14-320c6e33c05d"
+        },
+        {
+          "description": "controlproof control test for ia-5.1 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "ia-5.1"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "ia-5.1 Password-based Authentication",
+          "uuid": "b4fb747e-8ec9-577e-9a81-6962f009a076"
+        },
+        {
+          "description": "controlproof control test for sc-28 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "sc-28"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "sc-28 Protection of Information at Rest",
+          "uuid": "e9a95193-eb88-5866-8a43-9743a4178e50"
+        },
+        {
+          "description": "controlproof control test for sc-28.1 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "sc-28.1"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "sc-28.1 Cryptographic Protection",
+          "uuid": "bcb932ef-53f5-5686-af51-11d73cb60131"
+        },
+        {
+          "description": "controlproof control test for sc-7 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "sc-7"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "sc-7 Boundary Protection",
+          "uuid": "72d04a95-d730-53d1-a118-7a0c4470bb29"
+        },
+        {
+          "description": "controlproof control test for si-7.1 using the inspect method (EXAMINE).",
+          "props": [
+            {
+              "name": "controlproof-method",
+              "ns": "https://github.com/Govardhan527/controlproof/ns/oscal",
+              "value": "inspect"
+            }
+          ],
+          "related-controls": {
+            "control-selections": [
+              {
+                "include-controls": [
+                  {
+                    "control-id": "si-7.1"
+                  }
+                ]
+              }
+            ]
+          },
+          "title": "si-7.1 Integrity Checks",
+          "uuid": "8c8d78d7-387c-5cda-843c-cdd31962ed3e"
+        }
+      ]
+    },
+    "metadata": {
+      "last-modified": "2026-09-29T12:00:50Z",
+      "oscal-version": "1.2.3",
+      "title": "controlproof assessment plan: AWS baseline",
+      "version": "20260929T120000Z"
+    },
+    "reviewed-controls": {
+      "control-selections": [
+        {
+          "include-controls": [
+            {
+              "control-id": "ac-2"
+            },
+            {
+              "control-id": "au-2"
+            },
+            {
+              "control-id": "ia-2.2"
+            },
+            {
+              "control-id": "ia-5.1"
+            },
+            {
+              "control-id": "sc-28"
+            },
+            {
+              "control-id": "sc-28.1"
+            },
+            {
+              "control-id": "sc-7"
+            },
+            {
+              "control-id": "si-7.1"
+            }
+          ]
+        }
+      ]
+    },
+    "uuid": "2a19e4d1-09bd-5616-8324-9564808e982e"
+  }
+}

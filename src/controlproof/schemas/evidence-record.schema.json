@@ -1,0 +1,77 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "$id": "https://github.com/Govardhan527/controlproof/schemas/evidence-record/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "collected_at": {
+      "format": "date-time",
+      "title": "Collected At",
+      "type": "string"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "operation": {
+      "minLength": 1,
+      "title": "Operation",
+      "type": "string"
+    },
+    "region": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Region"
+    },
+    "request": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Request",
+      "type": "object"
+    },
+    "response": {
+      "$ref": "#/$defs/JsonValue",
+      "default": null
+    },
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "service": {
+      "minLength": 1,
+      "title": "Service",
+      "type": "string"
+    }
+  },
+  "required": [
+    "service",
+    "operation",
+    "request",
+    "collected_at"
+  ],
+  "title": "EvidenceRecord",
+  "type": "object"
+}

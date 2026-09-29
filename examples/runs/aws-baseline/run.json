@@ -1,0 +1,271 @@
+{
+  "account": "123456789012",
+  "ended_at": "2026-09-29T12:00:50Z",
+  "profile_id": "aws-baseline",
+  "regions": [
+    "us-east-1"
+  ],
+  "results": [
+    {
+      "control_id": "ac-2",
+      "ended_at": "2026-09-29T12:00:11Z",
+      "evidence_refs": [
+        "6b3a92d989afd6229ec65a15e0d259f4979a6625618eb0c8ae5d051939d22d8c",
+        "2ec2a18544b6869ceffcc69c4f5c0bb52051ffba10a5ca18a9b88e9527b83ebc",
+        "ecbd7b0fdc51b799f4cfdc1ba9c78134af6242d703fa5aede8a527d2d020d875",
+        "d01b2a6dbac2f78bab777c67f572fa283bbab31e6232b55eafab1ca2c1554184",
+        "1c9e0b2d2ee980aca415fb21bd17eb00d124d78304d970bd862f450733cad943",
+        "32e04c18b314c62c08bbe4f1f320aed6b597428b81081ee4aec8ce8b69606516",
+        "73c325111fd21d28060737851b3f9c5d4653f5ae6d7621af5da999bc27ff2710",
+        "ce1d4ffcac5f26dab95e42289a814579a31bdcd626acbd5101c7a5af9707973c"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "6b3a92d989afd6229ec65a15e0d259f4979a6625618eb0c8ae5d051939d22d8c",
+            "2ec2a18544b6869ceffcc69c4f5c0bb52051ffba10a5ca18a9b88e9527b83ebc",
+            "ecbd7b0fdc51b799f4cfdc1ba9c78134af6242d703fa5aede8a527d2d020d875",
+            "d01b2a6dbac2f78bab777c67f572fa283bbab31e6232b55eafab1ca2c1554184",
+            "1c9e0b2d2ee980aca415fb21bd17eb00d124d78304d970bd862f450733cad943",
+            "32e04c18b314c62c08bbe4f1f320aed6b597428b81081ee4aec8ce8b69606516",
+            "73c325111fd21d28060737851b3f9c5d4653f5ae6d7621af5da999bc27ff2710",
+            "ce1d4ffcac5f26dab95e42289a814579a31bdcd626acbd5101c7a5af9707973c"
+          ],
+          "subjects": [
+            "arn:aws:iam::[ACCOUNT]:user/alice",
+            "arn:aws:iam::[ACCOUNT]:user/bob",
+            "arn:aws:iam::[ACCOUNT]:user/svc-deploy"
+          ],
+          "summary": "Checked the console passwords and active access keys of 3 IAM user(s) against a 90-day unused limit."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:02Z",
+      "status": "pass",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "au-2",
+      "ended_at": "2026-09-29T12:00:17Z",
+      "evidence_refs": [
+        "70bcbac7a3d5b6334ac6ee36ee2a6b98038a57750000e48cf7378a7396f6b273",
+        "cefb8acac7d81386ba771dee985e03b013e10313127e73f69b0643552e62abb6",
+        "bdfb3cd4bb68b725595062c4bd797ec060af58d641ce4cfdcf0069a51c6d89ac"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "70bcbac7a3d5b6334ac6ee36ee2a6b98038a57750000e48cf7378a7396f6b273",
+            "cefb8acac7d81386ba771dee985e03b013e10313127e73f69b0643552e62abb6",
+            "bdfb3cd4bb68b725595062c4bd797ec060af58d641ce4cfdcf0069a51c6d89ac"
+          ],
+          "subjects": [
+            "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+          ],
+          "summary": "Checked 1 multi-Region trail(s) visible from us-east-1 for logging of all management events."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:13Z",
+      "status": "pass",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "ia-2.2",
+      "ended_at": "2026-09-29T12:00:26Z",
+      "evidence_refs": [
+        "ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995",
+        "ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd",
+        "42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8",
+        "b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb",
+        "924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07",
+        "4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995",
+            "ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd",
+            "42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8",
+            "b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb",
+            "924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07",
+            "4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2"
+          ],
+          "subjects": [
+            "arn:aws:iam::[ACCOUNT]:user/alice",
+            "arn:aws:iam::[ACCOUNT]:user/bob"
+          ],
+          "summary": "Checked MFA devices for the 2 of 3 IAM user(s) that have a console password."
+        },
+        {
+          "evidence_refs": [
+            "ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995",
+            "ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd",
+            "42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8",
+            "b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb",
+            "924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07",
+            "4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2"
+          ],
+          "subjects": [
+            "arn:aws:iam::[ACCOUNT]:user/bob"
+          ],
+          "summary": "bob has a console password but no MFA device."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:19Z",
+      "status": "fail",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "ia-5.1",
+      "ended_at": "2026-09-29T12:00:30Z",
+      "evidence_refs": [
+        "d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13"
+          ],
+          "subjects": [],
+          "summary": "Checked the IAM account password policy against the profile's requirements."
+        },
+        {
+          "evidence_refs": [
+            "d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13"
+          ],
+          "subjects": [],
+          "summary": "password policy minimum length 8 is below 14."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:28Z",
+      "status": "fail",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "sc-28",
+      "ended_at": "2026-09-29T12:00:34Z",
+      "evidence_refs": [
+        "5c5287a1f72a1c85c3493663b46b930a07cc47ebb881bfac0db0ce7433f986d2"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "5c5287a1f72a1c85c3493663b46b930a07cc47ebb881bfac0db0ce7433f986d2"
+          ],
+          "subjects": [
+            "us-east-1"
+          ],
+          "summary": "Checked EBS encryption by default in us-east-1."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:32Z",
+      "status": "pass",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "sc-28.1",
+      "ended_at": "2026-09-29T12:00:41Z",
+      "evidence_refs": [
+        "518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe",
+        "87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61",
+        "1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05",
+        "7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe",
+            "87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61",
+            "1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05",
+            "7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2"
+          ],
+          "subjects": [
+            "arn:aws:s3:::cp-demo-kms",
+            "arn:aws:s3:::cp-demo-sse-s3",
+            "arn:aws:s3:::cp-demo-trail-logs"
+          ],
+          "summary": "Checked the default encryption of 3 S3 bucket(s) for SSE-KMS or DSSE-KMS."
+        },
+        {
+          "evidence_refs": [
+            "518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe",
+            "87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61",
+            "1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05",
+            "7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2"
+          ],
+          "subjects": [
+            "arn:aws:s3:::cp-demo-sse-s3",
+            "arn:aws:s3:::cp-demo-trail-logs"
+          ],
+          "summary": "bucket cp-demo-sse-s3 defaults to AES256; bucket cp-demo-trail-logs defaults to AES256."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:36Z",
+      "status": "fail",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "sc-7",
+      "ended_at": "2026-09-29T12:00:45Z",
+      "evidence_refs": [
+        "8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872"
+          ],
+          "subjects": [
+            "us-east-1/sg-1f642c312c21036a5",
+            "us-east-1/sg-d3f25076d5c16e645"
+          ],
+          "summary": "Checked 2 security group(s) in us-east-1 for internet access to port(s) 22, 3389."
+        },
+        {
+          "evidence_refs": [
+            "8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872"
+          ],
+          "subjects": [
+            "us-east-1/sg-1f642c312c21036a5"
+          ],
+          "summary": "security group sg-1f642c312c21036a5 (cp-demo-open-ssh) in us-east-1 opens port(s) 22 to the internet."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:43Z",
+      "status": "fail",
+      "tool_version": "0.0.0"
+    },
+    {
+      "control_id": "si-7.1",
+      "ended_at": "2026-09-29T12:00:49Z",
+      "evidence_refs": [
+        "61e302b55dedafe43edede5d0e250f1d43247211d56febd41bd181f225edf558"
+      ],
+      "method": "inspect",
+      "observations": [
+        {
+          "evidence_refs": [
+            "61e302b55dedafe43edede5d0e250f1d43247211d56febd41bd181f225edf558"
+          ],
+          "subjects": [
+            "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+          ],
+          "summary": "Checked log file validation on 1 trail(s) in us-east-1."
+        }
+      ],
+      "started_at": "2026-09-29T12:00:47Z",
+      "status": "pass",
+      "tool_version": "0.0.0"
+    }
+  ],
+  "run_id": "20260929T120000Z",
+  "schema_version": "1.1.0",
+  "started_at": "2026-09-29T12:00:00Z",
+  "tool_version": "0.0.0"
+}

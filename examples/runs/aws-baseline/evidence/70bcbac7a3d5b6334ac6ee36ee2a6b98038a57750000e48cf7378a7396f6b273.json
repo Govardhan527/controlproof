@@ -1,0 +1,27 @@
+{
+  "collected_at": "2026-09-29T12:00:14Z",
+  "error": null,
+  "operation": "DescribeTrails",
+  "region": "us-east-1",
+  "request": {
+    "includeShadowTrails": true
+  },
+  "response": {
+    "trailList": [
+      {
+        "HasCustomEventSelectors": false,
+        "HasInsightSelectors": false,
+        "HomeRegion": "us-east-1",
+        "IncludeGlobalServiceEvents": true,
+        "IsMultiRegionTrail": true,
+        "IsOrganizationTrail": false,
+        "LogFileValidationEnabled": true,
+        "Name": "cp-demo-trail",
+        "S3BucketName": "cp-demo-trail-logs",
+        "TrailARN": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+      }
+    ]
+  },
+  "schema_version": "1.0.0",
+  "service": "cloudtrail"
+}

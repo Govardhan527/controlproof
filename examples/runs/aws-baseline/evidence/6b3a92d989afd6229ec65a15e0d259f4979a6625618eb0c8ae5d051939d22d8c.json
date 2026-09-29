@@ -1,0 +1,35 @@
+{
+  "collected_at": "2026-09-29T12:00:03Z",
+  "error": null,
+  "operation": "ListUsers",
+  "region": null,
+  "request": {},
+  "response": {
+    "IsTruncated": false,
+    "Users": [
+      {
+        "Arn": "arn:aws:iam::[ACCOUNT]:user/alice",
+        "CreateDate": "2026-09-29T17:10:25.664587Z",
+        "Path": "/",
+        "UserId": "oankya0u96990x2g4274",
+        "UserName": "alice"
+      },
+      {
+        "Arn": "arn:aws:iam::[ACCOUNT]:user/bob",
+        "CreateDate": "2026-09-29T17:10:25.679807Z",
+        "Path": "/",
+        "UserId": "w00j9hezteglmvkdkh85",
+        "UserName": "bob"
+      },
+      {
+        "Arn": "arn:aws:iam::[ACCOUNT]:user/svc-deploy",
+        "CreateDate": "2026-09-29T17:10:25.689241Z",
+        "Path": "/",
+        "UserId": "pyibsbxpvb7mg8qs8wzb",
+        "UserName": "svc-deploy"
+      }
+    ]
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

@@ -1,9 +1,9 @@
-"""Three stub controls for M1: each returns the outcome its profile asks for, without AWS.
+"""Three stub controls: each returns the outcome its profile asks for, without AWS behaviour.
 
-They live in tests/, never in the package, and are replaced by real controls from M2 on.
+They live in tests/, never in the package. They cover the `error` and `not_tested` mappings that
+the real controls only reach through failures.
 """
 
-import hashlib
 from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -11,14 +11,18 @@ from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
 
-from controlproof.controls import Control, ControlContext
+from controlproof.controls import Control, ControlContext, typed_params
+from controlproof.evidence import EvidenceStore
 from controlproof.model import ControlResult, Method, Observation, RunRecord, Status
 from controlproof.output import render_run
 from controlproof.profile import Profile, load_profile
+from controlproof.runner import prepare, run_controls
+from fake_aws import FakeAws
 
 FIXTURES = Path(__file__).parent / "fixtures"
 TOOL_VERSION = "0.0.0"
 ACCOUNT = "123456789012"
+REGIONS = ("us-east-1",)
 START = {
     "stub-run-a": datetime(2026, 9, 29, 12, 0, 0, tzinfo=UTC),
     "stub-run-b": datetime(2026, 9, 30, 12, 0, 0, tzinfo=UTC),
@@ -35,12 +39,12 @@ class _Stub(Control):
     Params: ClassVar[type[BaseModel]] = StubParams
 
     def run(self, ctx: ControlContext) -> ControlResult:
-        assert isinstance(ctx.params, StubParams)
-        outcome = ctx.params.outcome
+        outcome = typed_params(ctx, StubParams).outcome
         started = ctx.clock()
         subject = f"arn:aws:s3:::stub-{self.id}"
-        evidence = hashlib.sha256(f"{self.id}:{outcome}".encode()).hexdigest()
-        refs = (evidence,) if outcome in (Status.PASS, Status.FAIL) else ()
+        refs: tuple[str, ...] = ()
+        if outcome in (Status.PASS, Status.FAIL):
+            refs = (ctx.aws.call("stub", "Check", Control=self.id, Outcome=outcome.value).ref,)
         summary = {
             Status.PASS: f"Stub check of {subject} met the expected state.",
             Status.FAIL: f"Stub check of {subject} did not meet the expected state.",
@@ -50,16 +54,7 @@ class _Stub(Control):
         observation = Observation(
             summary=summary, subjects=(subject,) if refs else (), evidence_refs=refs
         )
-        return ControlResult(
-            control_id=self.id,
-            method=self.method,
-            status=outcome,
-            observations=(observation,),
-            evidence_refs=refs,
-            started_at=started,
-            ended_at=ctx.clock(),
-            tool_version=ctx.tool_version,
-        )
+        return self.result(ctx, started, outcome, [observation], refs)
 
 
 class StubAccountManagement(_Stub):
@@ -94,28 +89,24 @@ def ticking_clock(start: datetime) -> Iterator[datetime]:
         moment += timedelta(seconds=1)
 
 
-def stub_run(name: str) -> tuple[RunRecord, Profile]:
+def stub_run(name: str) -> tuple[RunRecord, Profile, EvidenceStore]:
     profile = load_profile(FIXTURES / f"{name}.yaml", STUBS)
     ticks = ticking_clock(START[name])
     clock = lambda: next(ticks)  # noqa: E731
-    started = clock()
-    run_id = started.strftime("%Y%m%dT%H%M%SZ")
-    results = []
-    for entry in sorted(profile.controls, key=lambda c: c.id):
-        control = STUBS[entry.id]()
-        params = control.Params.model_validate(entry.params)
-        results.append(control.run(ControlContext(run_id, clock, TOOL_VERSION, params)))
-    run = RunRecord(
-        run_id=run_id,
+    evidence = EvidenceStore()
+    run = run_controls(
+        prepare(profile, STUBS),
         profile_id=profile.id,
-        started_at=started,
-        ended_at=clock(),
+        account=ACCOUNT,
+        regions=REGIONS,
+        aws=FakeAws(evidence, clock),
+        evidence=evidence,
+        clock=clock,
         tool_version=TOOL_VERSION,
-        results=tuple(results),
     )
-    return run, profile
+    return run, profile, evidence
 
 
 def render_stub(name: str) -> dict[str, bytes]:
-    run, profile = stub_run(name)
-    return render_run(run, profile, TITLES, METHODS, ACCOUNT)
+    run, profile, evidence = stub_run(name)
+    return render_run(run, profile, TITLES, METHODS, evidence.files())

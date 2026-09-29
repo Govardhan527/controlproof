@@ -81,3 +81,25 @@ def test_invalid_schema_fails(tmp_path: Path, capsys: pytest.CaptureFixture[str]
     write(tmp_path / "examples" / "x" / "a.json", {})
     assert run(tmp_path) == 1
     assert "is not a valid JSON Schema" in capsys.readouterr().out
+
+
+def test_a_run_directory_is_checked_file_by_file(tmp_path: Path) -> None:
+    write(tmp_path / "schemas" / "run-record.schema.json", SCHEMA)
+    write(tmp_path / "schemas" / "evidence-record.schema.json", SCHEMA)
+    run_dir = tmp_path / "examples" / "runs" / "r1"
+    write(run_dir / "run.json", {"schema_version": "1.1.0"})
+    write(run_dir / "evidence" / "abc.json", {"schema_version": "1.0.0"})
+    assert run_count(tmp_path) == (2, [])
+    write(run_dir / "evidence" / "bad.json", {"schema_version": 3})
+    assert run(tmp_path) == 1
+
+
+def test_an_unknown_file_in_a_run_directory_fails(tmp_path: Path) -> None:
+    write(tmp_path / "examples" / "runs" / "r1" / "notes.json", {})
+    assert run(tmp_path) == 1
+
+
+def run_count(tmp_path: Path) -> tuple[int, list[str]]:
+    from validate_outputs import validate
+
+    return validate(tmp_path / "examples", tmp_path / "schemas")

@@ -1,0 +1,15 @@
+{
+  "collected_at": "2026-09-29T12:00:24Z",
+  "error": null,
+  "operation": "ListMFADevices",
+  "region": null,
+  "request": {
+    "UserName": "bob"
+  },
+  "response": {
+    "IsTruncated": false,
+    "MFADevices": []
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

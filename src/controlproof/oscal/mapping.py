@@ -11,6 +11,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from controlproof.evidence import EVIDENCE_DIR
 from controlproof.model import ControlResult, Method, RunRecord, Status
 from controlproof.oscal.models import assessment_plan, assessment_results
 from controlproof.profile import Profile
@@ -74,7 +75,6 @@ def build_assessment_plan(
     profile: Profile,
     titles: Mapping[str, str],
     methods: Mapping[str, Method],
-    account: str,
 ) -> dict[str, Any]:
     """The minimal plan each run writes, so `import-ap` has a target (ADR-0005 items 2 and 5)."""
     ssp = oscal_uuid(run.run_id, "ssp-placeholder")
@@ -105,7 +105,8 @@ def build_assessment_plan(
                         "title": "No system security plan supplied",
                         "description": (
                             "controlproof ran without a system security plan. "
-                            f"Assessed AWS account: {account}."
+                            f"Assessed AWS account: {run.account}; "
+                            f"Regions: {', '.join(run.regions)}."
                         ),
                     }
                 ]
@@ -131,7 +132,10 @@ def _observations(run_id: str, result: ControlResult) -> list[dict[str, Any]]:
             ]
         if observation.evidence_refs:
             entry["relevant-evidence"] = [
-                {"description": f"Redacted API response, SHA-256 {ref}"}
+                {
+                    "href": f"{EVIDENCE_DIR}/{ref}.json",
+                    "description": f"Redacted AWS API response, SHA-256 {ref}",
+                }
                 for ref in observation.evidence_refs
             ]
         observations.append(entry)

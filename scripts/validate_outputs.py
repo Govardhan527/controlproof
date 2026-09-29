@@ -2,6 +2,8 @@
 
 Layout (ADR-0003):
     examples/<format>/*.json                  example outputs of one format
+    examples/runs/<name>/                     a complete run directory (ADR-0008); each file is
+                                              checked as the format its name implies
     <schemas>/<format>.schema.json            the project's schema for that format
     <schemas>/official/<format>.schema.json   the standard's own schema, where one exists
 
@@ -22,6 +24,13 @@ from jsonschema.exceptions import SchemaError
 from controlproof.validation import build_validator, schema_errors
 
 DEFAULT_SCHEMAS = Path("src/controlproof/schemas")
+RUNS = "runs"
+RUN_FILES = {
+    "run.json": "run-record",
+    "assessment-plan.json": "oscal-assessment-plan",
+    "assessment-results.json": "oscal-assessment-results",
+    "manifest.json": "manifest",
+}
 
 
 def load_json(path: Path) -> Any:
@@ -37,6 +46,35 @@ def errors_against(schema_path: Path, instance: Any) -> list[str]:
     return schema_errors(validator, instance)
 
 
+def schemas_for(format_name: str, schemas_dir: Path) -> list[Path]:
+    candidates = (
+        schemas_dir / f"{format_name}.schema.json",
+        schemas_dir / "official" / f"{format_name}.schema.json",
+    )
+    return [path for path in candidates if path.is_file()]
+
+
+def check_file(example: Path, schema_paths: list[Path]) -> list[str]:
+    instance = load_json(example)
+    return [
+        f"{example} vs {schema_path}: {error}"
+        for schema_path in schema_paths
+        for error in errors_against(schema_path, instance)
+    ]
+
+
+def run_files(run_dir: Path) -> list[tuple[Path, str | None]]:
+    """Each JSON file of a run directory with the format its name implies (None: unknown)."""
+    files: list[tuple[Path, str | None]] = []
+    for path in sorted(run_dir.rglob("*.json")):
+        relative = path.relative_to(run_dir)
+        if relative.parts[0] == "evidence" and len(relative.parts) == 2:
+            files.append((path, "evidence-record"))
+        else:
+            files.append((path, RUN_FILES.get(str(relative))))
+    return files
+
+
 def validate(examples_dir: Path, schemas_dir: Path) -> tuple[int, list[str]]:
     """Return (number of example files checked, problems found)."""
     problems: list[str] = []
@@ -45,21 +83,23 @@ def validate(examples_dir: Path, schemas_dir: Path) -> tuple[int, list[str]]:
         return 0, problems
     for stray in sorted(examples_dir.glob("*.json")):
         problems.append(f"{stray}: example outputs must live in examples/<format>/")
-    for format_dir in sorted(p for p in examples_dir.iterdir() if p.is_dir()):
-        candidates = (
-            schemas_dir / f"{format_dir.name}.schema.json",
-            schemas_dir / "official" / f"{format_dir.name}.schema.json",
-        )
-        present = [path for path in candidates if path.is_file()]
+    for format_dir in sorted(p for p in examples_dir.iterdir() if p.is_dir() and p.name != RUNS):
+        present = schemas_for(format_dir.name, schemas_dir)
         if not present:
-            problems.append(f"{format_dir}: no schema at {candidates[0]} or {candidates[1]}")
+            problems.append(f"{format_dir}: no schema for format {format_dir.name!r}")
             continue
         for example in sorted(format_dir.glob("*.json")):
             checked += 1
-            instance = load_json(example)
-            for schema_path in present:
-                for error in errors_against(schema_path, instance):
-                    problems.append(f"{example} vs {schema_path}: {error}")
+            problems.extend(check_file(example, present))
+    runs_dir = examples_dir / RUNS
+    for run_dir in sorted(p for p in runs_dir.iterdir() if p.is_dir()) if runs_dir.is_dir() else []:
+        for path, format_name in run_files(run_dir):
+            present = schemas_for(format_name, schemas_dir) if format_name else []
+            if not present:
+                problems.append(f"{path}: not a known run file, or no schema for it")
+                continue
+            checked += 1
+            problems.extend(check_file(path, present))
     return checked, problems
 
 

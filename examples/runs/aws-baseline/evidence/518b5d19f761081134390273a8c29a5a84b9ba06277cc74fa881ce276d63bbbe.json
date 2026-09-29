@@ -1,0 +1,29 @@
+{
+  "collected_at": "2026-09-29T12:00:37Z",
+  "error": null,
+  "operation": "ListBuckets",
+  "region": null,
+  "request": {},
+  "response": {
+    "Buckets": [
+      {
+        "CreationDate": "2026-09-29T17:10:27Z",
+        "Name": "cp-demo-kms"
+      },
+      {
+        "CreationDate": "2026-09-29T17:10:27Z",
+        "Name": "cp-demo-sse-s3"
+      },
+      {
+        "CreationDate": "2026-09-29T17:10:27Z",
+        "Name": "cp-demo-trail-logs"
+      }
+    ],
+    "Owner": {
+      "DisplayName": "webfile",
+      "ID": "bcaf1ffd86f41161ca5fb16fd081034f"
+    }
+  },
+  "schema_version": "1.0.0",
+  "service": "s3"
+}

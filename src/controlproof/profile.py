@@ -11,7 +11,9 @@ from typing import Any, Literal, Self
 import yaml
 from pydantic import Field, JsonValue, ValidationError, model_validator
 
-from controlproof.model import Contract, ControlId, Token
+from controlproof.model import Contract, ControlId, Region, Token
+
+PROFILE_VERSION: Literal["1.1.0"] = "1.1.0"
 
 
 class ProfileError(Exception):
@@ -24,10 +26,11 @@ class ProfileControl(Contract):
 
 
 class Profile(Contract):
-    schema_version: Literal["1.0.0"]
+    schema_version: Literal["1.0.0", "1.1.0"]
     id: Token
     title: str = Field(min_length=1)
     provider: Literal["aws"]
+    regions: tuple[Region, ...] | None = Field(default=None, min_length=1)
     controls: tuple[ProfileControl, ...] = Field(min_length=1)
 
     @model_validator(mode="after")

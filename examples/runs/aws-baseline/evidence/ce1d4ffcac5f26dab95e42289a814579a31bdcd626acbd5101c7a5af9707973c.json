@@ -1,0 +1,18 @@
+{
+  "collected_at": "2026-09-29T12:00:10Z",
+  "error": null,
+  "operation": "GetAccessKeyLastUsed",
+  "region": null,
+  "request": {
+    "AccessKeyId": "[KEY:...QZMU]"
+  },
+  "response": {
+    "AccessKeyLastUsed": {
+      "Region": "N/A",
+      "ServiceName": "N/A"
+    },
+    "UserName": "svc-deploy"
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

@@ -1,0 +1,411 @@
+[
+  {
+    "key": "[\"paginate\", \"iam\", \"ListUsers\", null, {}]",
+    "pages": [
+      {
+        "IsTruncated": false,
+        "Users": [
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/alice",
+            "CreateDate": "2026-09-29T17:10:25.664587Z",
+            "Path": "/",
+            "UserId": "oankya0u96990x2g4274",
+            "UserName": "alice"
+          },
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/bob",
+            "CreateDate": "2026-09-29T17:10:25.679807Z",
+            "Path": "/",
+            "UserId": "w00j9hezteglmvkdkh85",
+            "UserName": "bob"
+          },
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/svc-deploy",
+            "CreateDate": "2026-09-29T17:10:25.689241Z",
+            "Path": "/",
+            "UserId": "pyibsbxpvb7mg8qs8wzb",
+            "UserName": "svc-deploy"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"alice\"}]",
+    "response": {
+      "LoginProfile": {
+        "CreateDate": "2026-09-29T17:10:25.664587Z",
+        "PasswordResetRequired": false,
+        "UserName": "alice"
+      }
+    }
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListAccessKeys\", null, {\"UserName\": \"alice\"}]",
+    "pages": [
+      {
+        "AccessKeyMetadata": []
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"bob\"}]",
+    "response": {
+      "LoginProfile": {
+        "CreateDate": "2026-09-29T17:10:25.679807Z",
+        "PasswordResetRequired": false,
+        "UserName": "bob"
+      }
+    }
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListAccessKeys\", null, {\"UserName\": \"bob\"}]",
+    "pages": [
+      {
+        "AccessKeyMetadata": []
+      }
+    ]
+  },
+  {
+    "error": {
+      "code": "NoSuchEntity",
+      "message": ""
+    },
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"svc-deploy\"}]"
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListAccessKeys\", null, {\"UserName\": \"svc-deploy\"}]",
+    "pages": [
+      {
+        "AccessKeyMetadata": [
+          {
+            "AccessKeyId": "[KEY:...QZMU]",
+            "CreateDate": "2026-09-29T17:10:25.691798Z",
+            "Status": "Active",
+            "UserName": "svc-deploy"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetAccessKeyLastUsed\", null, {\"AccessKeyId\": \"[KEY:...QZMU]\"}]",
+    "response": {
+      "AccessKeyLastUsed": {
+        "Region": "N/A",
+        "ServiceName": "N/A"
+      },
+      "UserName": "svc-deploy"
+    }
+  },
+  {
+    "key": "[\"call\", \"cloudtrail\", \"DescribeTrails\", \"us-east-1\", {\"includeShadowTrails\": true}]",
+    "response": {
+      "trailList": [
+        {
+          "HasCustomEventSelectors": false,
+          "HasInsightSelectors": false,
+          "HomeRegion": "us-east-1",
+          "IncludeGlobalServiceEvents": true,
+          "IsMultiRegionTrail": true,
+          "IsOrganizationTrail": false,
+          "LogFileValidationEnabled": true,
+          "Name": "cp-demo-trail",
+          "S3BucketName": "cp-demo-trail-logs",
+          "TrailARN": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+        }
+      ]
+    }
+  },
+  {
+    "key": "[\"call\", \"cloudtrail\", \"GetTrailStatus\", \"us-east-1\", {\"Name\": \"arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail\"}]",
+    "response": {
+      "IsLogging": true,
+      "LatestDeliveryAttemptSucceeded": "",
+      "LatestDeliveryAttemptTime": "2026-09-29T17:10:27Z",
+      "LatestDeliveryTime": "2026-09-29T11:40:27Z",
+      "LatestNotificationAttemptSucceeded": "",
+      "LatestNotificationAttemptTime": "",
+      "StartLoggingTime": "2026-09-29T11:40:27Z",
+      "TimeLoggingStarted": "2026-09-29T17:10:27Z",
+      "TimeLoggingStopped": ""
+    }
+  },
+  {
+    "key": "[\"call\", \"cloudtrail\", \"GetEventSelectors\", \"us-east-1\", {\"TrailName\": \"arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail\"}]",
+    "response": {
+      "AdvancedEventSelectors": [],
+      "EventSelectors": [
+        {
+          "IncludeManagementEvents": true,
+          "ReadWriteType": "All"
+        }
+      ],
+      "TrailARN": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+    }
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListUsers\", null, {}]",
+    "pages": [
+      {
+        "IsTruncated": false,
+        "Users": [
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/alice",
+            "CreateDate": "2026-09-29T17:10:25.664587Z",
+            "Path": "/",
+            "UserId": "oankya0u96990x2g4274",
+            "UserName": "alice"
+          },
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/bob",
+            "CreateDate": "2026-09-29T17:10:25.679807Z",
+            "Path": "/",
+            "UserId": "w00j9hezteglmvkdkh85",
+            "UserName": "bob"
+          },
+          {
+            "Arn": "arn:aws:iam::[ACCOUNT]:user/svc-deploy",
+            "CreateDate": "2026-09-29T17:10:25.689241Z",
+            "Path": "/",
+            "UserId": "pyibsbxpvb7mg8qs8wzb",
+            "UserName": "svc-deploy"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"alice\"}]",
+    "response": {
+      "LoginProfile": {
+        "CreateDate": "2026-09-29T17:10:25.664587Z",
+        "PasswordResetRequired": false,
+        "UserName": "alice"
+      }
+    }
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListMFADevices\", null, {\"UserName\": \"alice\"}]",
+    "pages": [
+      {
+        "IsTruncated": false,
+        "MFADevices": [
+          {
+            "EnableDate": "2026-09-29T17:10:25.673654Z",
+            "SerialNumber": "arn:aws:iam::[ACCOUNT]:mfa/alice-mfa",
+            "UserName": "alice"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"bob\"}]",
+    "response": {
+      "LoginProfile": {
+        "CreateDate": "2026-09-29T17:10:25.679807Z",
+        "PasswordResetRequired": false,
+        "UserName": "bob"
+      }
+    }
+  },
+  {
+    "key": "[\"paginate\", \"iam\", \"ListMFADevices\", null, {\"UserName\": \"bob\"}]",
+    "pages": [
+      {
+        "IsTruncated": false,
+        "MFADevices": []
+      }
+    ]
+  },
+  {
+    "error": {
+      "code": "NoSuchEntity",
+      "message": ""
+    },
+    "key": "[\"call\", \"iam\", \"GetLoginProfile\", null, {\"UserName\": \"svc-deploy\"}]"
+  },
+  {
+    "key": "[\"call\", \"iam\", \"GetAccountPasswordPolicy\", null, {}]",
+    "response": {
+      "PasswordPolicy": {
+        "AllowUsersToChangePassword": false,
+        "ExpirePasswords": true,
+        "HardExpiry": false,
+        "MaxPasswordAge": 90,
+        "MinimumPasswordLength": 8,
+        "PasswordReusePrevention": 24,
+        "RequireLowercaseCharacters": true,
+        "RequireNumbers": true,
+        "RequireSymbols": true,
+        "RequireUppercaseCharacters": true
+      }
+    }
+  },
+  {
+    "key": "[\"call\", \"ec2\", \"GetEbsEncryptionByDefault\", \"us-east-1\", {}]",
+    "response": {
+      "EbsEncryptionByDefault": true
+    }
+  },
+  {
+    "key": "[\"paginate\", \"s3\", \"ListBuckets\", null, {}]",
+    "pages": [
+      {
+        "Buckets": [
+          {
+            "CreationDate": "2026-09-29T17:10:27Z",
+            "Name": "cp-demo-kms"
+          },
+          {
+            "CreationDate": "2026-09-29T17:10:27Z",
+            "Name": "cp-demo-sse-s3"
+          },
+          {
+            "CreationDate": "2026-09-29T17:10:27Z",
+            "Name": "cp-demo-trail-logs"
+          }
+        ],
+        "Owner": {
+          "DisplayName": "webfile",
+          "ID": "bcaf1ffd86f41161ca5fb16fd081034f"
+        }
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"s3\", \"GetBucketEncryption\", null, {\"Bucket\": \"cp-demo-kms\"}]",
+    "response": {
+      "ServerSideEncryptionConfiguration": {
+        "Rules": [
+          {
+            "ApplyServerSideEncryptionByDefault": {
+              "KMSMasterKeyID": "alias/aws/s3",
+              "SSEAlgorithm": "aws:kms"
+            },
+            "BucketKeyEnabled": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "key": "[\"call\", \"s3\", \"GetBucketEncryption\", null, {\"Bucket\": \"cp-demo-sse-s3\"}]",
+    "response": {
+      "ServerSideEncryptionConfiguration": {
+        "Rules": [
+          {
+            "ApplyServerSideEncryptionByDefault": {
+              "SSEAlgorithm": "AES256"
+            },
+            "BucketKeyEnabled": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "key": "[\"call\", \"s3\", \"GetBucketEncryption\", null, {\"Bucket\": \"cp-demo-trail-logs\"}]",
+    "response": {
+      "ServerSideEncryptionConfiguration": {
+        "Rules": [
+          {
+            "ApplyServerSideEncryptionByDefault": {
+              "SSEAlgorithm": "AES256"
+            },
+            "BucketKeyEnabled": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "key": "[\"paginate\", \"ec2\", \"DescribeSecurityGroups\", \"us-east-1\", {}]",
+    "pages": [
+      {
+        "SecurityGroups": [
+          {
+            "Description": "default VPC security group",
+            "GroupId": "sg-d3f25076d5c16e645",
+            "GroupName": "default",
+            "IpPermissions": [],
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+              }
+            ],
+            "OwnerId": "[ACCOUNT]",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:[ACCOUNT]:security-group/sg-d3f25076d5c16e645",
+            "Tags": [],
+            "VpcId": "vpc-fa5eb40912543c2a0"
+          },
+          {
+            "Description": "synthetic",
+            "GroupId": "sg-1f642c312c21036a5",
+            "GroupName": "cp-demo-open-ssh",
+            "IpPermissions": [
+              {
+                "FromPort": 22,
+                "IpProtocol": "tcp",
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": 22,
+                "UserIdGroupPairs": []
+              }
+            ],
+            "IpPermissionsEgress": [
+              {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                  {
+                    "CidrIp": "0.0.0.0/0"
+                  }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+              }
+            ],
+            "OwnerId": "[ACCOUNT]",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:[ACCOUNT]:security-group/sg-1f642c312c21036a5",
+            "Tags": [],
+            "VpcId": "vpc-fa5eb40912543c2a0"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "[\"call\", \"cloudtrail\", \"DescribeTrails\", \"us-east-1\", {\"includeShadowTrails\": true}]",
+    "response": {
+      "trailList": [
+        {
+          "HasCustomEventSelectors": false,
+          "HasInsightSelectors": false,
+          "HomeRegion": "us-east-1",
+          "IncludeGlobalServiceEvents": true,
+          "IsMultiRegionTrail": true,
+          "IsOrganizationTrail": false,
+          "LogFileValidationEnabled": true,
+          "Name": "cp-demo-trail",
+          "S3BucketName": "cp-demo-trail-logs",
+          "TrailARN": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+        }
+      ]
+    }
+  }
+]

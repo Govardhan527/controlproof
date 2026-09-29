@@ -1,0 +1,23 @@
+{
+  "collected_at": "2026-09-29T12:00:39Z",
+  "error": null,
+  "operation": "GetBucketEncryption",
+  "region": null,
+  "request": {
+    "Bucket": "cp-demo-sse-s3"
+  },
+  "response": {
+    "ServerSideEncryptionConfiguration": {
+      "Rules": [
+        {
+          "ApplyServerSideEncryptionByDefault": {
+            "SSEAlgorithm": "AES256"
+          },
+          "BucketKeyEnabled": false
+        }
+      ]
+    }
+  },
+  "schema_version": "1.0.0",
+  "service": "s3"
+}

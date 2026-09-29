@@ -1,0 +1,23 @@
+{
+  "collected_at": "2026-09-29T12:00:29Z",
+  "error": null,
+  "operation": "GetAccountPasswordPolicy",
+  "region": null,
+  "request": {},
+  "response": {
+    "PasswordPolicy": {
+      "AllowUsersToChangePassword": false,
+      "ExpirePasswords": true,
+      "HardExpiry": false,
+      "MaxPasswordAge": 90,
+      "MinimumPasswordLength": 8,
+      "PasswordReusePrevention": 24,
+      "RequireLowercaseCharacters": true,
+      "RequireNumbers": true,
+      "RequireSymbols": true,
+      "RequireUppercaseCharacters": true
+    }
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

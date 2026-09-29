@@ -1,0 +1,21 @@
+{
+  "collected_at": "2026-09-29T12:00:22Z",
+  "error": null,
+  "operation": "ListMFADevices",
+  "region": null,
+  "request": {
+    "UserName": "alice"
+  },
+  "response": {
+    "IsTruncated": false,
+    "MFADevices": [
+      {
+        "EnableDate": "2026-09-29T17:10:25.673654Z",
+        "SerialNumber": "arn:aws:iam::[ACCOUNT]:mfa/alice-mfa",
+        "UserName": "alice"
+      }
+    ]
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

@@ -1,0 +1,16 @@
+# Built-in profile. Rows 1 to 10 of ADR-0007 are M2; ac-6.2 and ia-2.1 wait on OQ-7.
+schema_version: "1.1.0"
+id: aws-baseline
+title: AWS baseline
+provider: aws
+controls:
+  - id: ac-2
+    params: {max_unused_days: 90}
+  - id: ia-2.2
+  - id: ia-5.1
+  - id: sc-28
+  - id: sc-28.1
+  - id: au-2
+  - id: si-7.1
+  - id: sc-7
+    params: {admin_ports: [22, 3389]}

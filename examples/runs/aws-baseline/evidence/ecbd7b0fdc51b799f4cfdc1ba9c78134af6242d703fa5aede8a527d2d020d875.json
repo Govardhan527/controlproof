@@ -1,0 +1,14 @@
+{
+  "collected_at": "2026-09-29T12:00:05Z",
+  "error": null,
+  "operation": "ListAccessKeys",
+  "region": null,
+  "request": {
+    "UserName": "alice"
+  },
+  "response": {
+    "AccessKeyMetadata": []
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

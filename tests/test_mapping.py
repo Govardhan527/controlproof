@@ -13,8 +13,8 @@ from stub_controls import ACCOUNT, METHODS, TITLES, stub_run
 
 
 def documents(name: str) -> tuple[dict[str, Any], dict[str, Any]]:
-    run, profile = stub_run(name)
-    plan = mapping.build_assessment_plan(run, profile, TITLES, METHODS, ACCOUNT)
+    run, profile, _ = stub_run(name)
+    plan = mapping.build_assessment_plan(run, profile, TITLES, METHODS)
     results = mapping.build_assessment_results(run, profile, TITLES)
     return plan, results
 
@@ -46,7 +46,7 @@ def test_status_mapping(
 
 def test_only_a_pass_is_satisfied() -> None:
     for name in ("stub-run-a", "stub-run-b"):
-        run, _ = stub_run(name)
+        run, _, _ = stub_run(name)
         by_id = findings(documents(name)[1])
         for result in run.results:
             satisfied = by_id[result.control_id]["target"]["status"]["state"] == "satisfied"
@@ -104,7 +104,7 @@ def test_every_uuid_is_version_5_and_unique() -> None:
 
 
 def test_the_plan_covers_every_profiled_control() -> None:
-    _, profile = stub_run("stub-run-a")
+    _, profile, _ = stub_run("stub-run-a")
     plan, _ = documents("stub-run-a")
     activities = plan["assessment-plan"]["local-definitions"]["activities"]
     assert [a["title"].split()[0] for a in activities] == list(profile.control_ids)
@@ -121,7 +121,7 @@ def test_the_official_schema_catches_what_the_generated_model_misses() -> None:
 
 
 def test_a_run_without_results_still_maps_to_valid_oscal() -> None:
-    run, profile = stub_run("stub-run-a")
+    run, profile, _ = stub_run("stub-run-a")
     empty = run.model_copy(update={"results": ()})
     result = mapping.build_assessment_results(empty, profile, TITLES)["assessment-results"]
     assert "findings" not in result["results"][0]

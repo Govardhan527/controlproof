@@ -13,24 +13,26 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from controlproof.model import SCHEMA_VERSION, RunRecord
-from controlproof.output import Manifest
-from controlproof.profile import Profile
+from controlproof.evidence import EVIDENCE_VERSION, EvidenceRecord
+from controlproof.model import RUN_RECORD_VERSION, RunRecord
+from controlproof.output import MANIFEST_VERSION, Manifest
+from controlproof.profile import PROFILE_VERSION, Profile
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "src" / "controlproof" / "schemas"
 ID_BASE = "https://github.com/Govardhan527/controlproof/schemas"
-FORMATS: dict[str, type[BaseModel]] = {
-    "manifest": Manifest,
-    "profile": Profile,
-    "run-record": RunRecord,
+FORMATS: dict[str, tuple[type[BaseModel], str]] = {
+    "evidence-record": (EvidenceRecord, EVIDENCE_VERSION),
+    "manifest": (Manifest, MANIFEST_VERSION),
+    "profile": (Profile, PROFILE_VERSION),
+    "run-record": (RunRecord, RUN_RECORD_VERSION),
 }
 
 
-def render(name: str, model: type[BaseModel]) -> str:
+def render(name: str, model: type[BaseModel], version: str) -> str:
     schema: dict[str, Any] = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": f"{ID_BASE}/{name}/{SCHEMA_VERSION}",
+        "$id": f"{ID_BASE}/{name}/{version}",
         **model.model_json_schema(),
     }
     return json.dumps(schema, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
@@ -42,9 +44,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     stale = []
-    for name, model in FORMATS.items():
+    for name, (model, version) in FORMATS.items():
         path = OUTPUT / f"{name}.schema.json"
-        text = render(name, model)
+        text = render(name, model, version)
         if path.is_file() and path.read_text(encoding="utf-8") == text:
             continue
         stale.append(path)

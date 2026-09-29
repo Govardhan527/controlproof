@@ -1,0 +1,15 @@
+{
+  "collected_at": "2026-09-29T12:00:08Z",
+  "error": {
+    "code": "NoSuchEntity",
+    "message": ""
+  },
+  "operation": "GetLoginProfile",
+  "region": null,
+  "request": {
+    "UserName": "svc-deploy"
+  },
+  "response": null,
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

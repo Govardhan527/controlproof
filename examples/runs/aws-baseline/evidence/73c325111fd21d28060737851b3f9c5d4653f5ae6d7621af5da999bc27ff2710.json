@@ -1,0 +1,21 @@
+{
+  "collected_at": "2026-09-29T12:00:09Z",
+  "error": null,
+  "operation": "ListAccessKeys",
+  "region": null,
+  "request": {
+    "UserName": "svc-deploy"
+  },
+  "response": {
+    "AccessKeyMetadata": [
+      {
+        "AccessKeyId": "[KEY:...QZMU]",
+        "CreateDate": "2026-09-29T17:10:25.691798Z",
+        "Status": "Active",
+        "UserName": "svc-deploy"
+      }
+    ]
+  },
+  "schema_version": "1.0.0",
+  "service": "iam"
+}

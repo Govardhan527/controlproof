@@ -1,0 +1,615 @@
+{
+  "assessment-results": {
+    "import-ap": {
+      "href": "assessment-plan.json"
+    },
+    "metadata": {
+      "last-modified": "2026-09-29T12:00:50Z",
+      "oscal-version": "1.2.3",
+      "title": "controlproof assessment results: AWS baseline",
+      "version": "20260929T120000Z"
+    },
+    "results": [
+      {
+        "description": "Automated control tests run by controlproof. Each finding states whether the control test passed. This is evidence for an assessor, not a statement of compliance.",
+        "end": "2026-09-29T12:00:50Z",
+        "findings": [
+          {
+            "description": "ac-2 Account Management: control test passed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "d3089b35-35a6-5e75-9e94-9cc68a059ad4"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "pass",
+                "state": "satisfied"
+              },
+              "target-id": "ac-2_obj",
+              "type": "objective-id"
+            },
+            "title": "ac-2: control test passed",
+            "uuid": "900ea25e-ba3d-576d-b69a-57df1381e572"
+          },
+          {
+            "description": "au-2 Event Logging: control test passed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "cc9b154d-16e5-5978-a8aa-3424dff54921"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "pass",
+                "state": "satisfied"
+              },
+              "target-id": "au-2_obj",
+              "type": "objective-id"
+            },
+            "title": "au-2: control test passed",
+            "uuid": "1c46ebec-452a-5c5b-ab2a-99c1a9d5698a"
+          },
+          {
+            "description": "ia-2.2 Multi-factor Authentication to Non-privileged Accounts: control test failed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "969416bc-aadd-5f27-9de8-2eb8dbb03e8f"
+              },
+              {
+                "observation-uuid": "ed512e0a-348a-57ec-bf4a-542a20c484ed"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "fail",
+                "state": "not-satisfied"
+              },
+              "target-id": "ia-2.2_obj",
+              "type": "objective-id"
+            },
+            "title": "ia-2.2: control test failed",
+            "uuid": "ef33c875-b84d-5d7b-a674-cc18e0b979de"
+          },
+          {
+            "description": "ia-5.1 Password-based Authentication: control test failed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "24e5869d-d961-5953-87f7-6d2330b4ba81"
+              },
+              {
+                "observation-uuid": "7501ec9e-e450-51c7-89c3-c15fc15bbf07"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "fail",
+                "state": "not-satisfied"
+              },
+              "target-id": "ia-5.1_obj",
+              "type": "objective-id"
+            },
+            "title": "ia-5.1: control test failed",
+            "uuid": "a87ce3d6-fa0b-5917-b2bc-f2dbbe46833a"
+          },
+          {
+            "description": "sc-28 Protection of Information at Rest: control test passed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "24a8114a-569c-5bef-aac1-be31fc3ba1fd"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "pass",
+                "state": "satisfied"
+              },
+              "target-id": "sc-28_obj",
+              "type": "objective-id"
+            },
+            "title": "sc-28: control test passed",
+            "uuid": "bb2949ce-2c1f-5a0e-88be-e1b083664bf6"
+          },
+          {
+            "description": "sc-28.1 Cryptographic Protection: control test failed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "386098e4-bbb8-554b-92ce-5c6abd84e891"
+              },
+              {
+                "observation-uuid": "ee53a34e-159c-55a8-a0c4-ebab2c105d29"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "fail",
+                "state": "not-satisfied"
+              },
+              "target-id": "sc-28.1_obj",
+              "type": "objective-id"
+            },
+            "title": "sc-28.1: control test failed",
+            "uuid": "3145e758-81ce-5bdf-a8bb-136232403f17"
+          },
+          {
+            "description": "sc-7 Boundary Protection: control test failed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "13f4e0b4-0992-5edc-91d0-b1ed18f6c916"
+              },
+              {
+                "observation-uuid": "081a8315-0d5f-5cde-9db2-0aede95e96bd"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "fail",
+                "state": "not-satisfied"
+              },
+              "target-id": "sc-7_obj",
+              "type": "objective-id"
+            },
+            "title": "sc-7: control test failed",
+            "uuid": "0bd2be49-b4a4-5ddf-a951-d354493176f1"
+          },
+          {
+            "description": "si-7.1 Integrity Checks: control test passed (inspect).",
+            "related-observations": [
+              {
+                "observation-uuid": "1f977221-a219-5b63-bd9d-68935bb52bc5"
+              }
+            ],
+            "target": {
+              "status": {
+                "reason": "pass",
+                "state": "satisfied"
+              },
+              "target-id": "si-7.1_obj",
+              "type": "objective-id"
+            },
+            "title": "si-7.1: control test passed",
+            "uuid": "16b21fe2-42ff-56d0-a86a-1a36c68f7910"
+          }
+        ],
+        "local-definitions": {
+          "inventory-items": [
+            {
+              "description": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail",
+              "uuid": "4f47ae6f-f3ce-5857-b36d-108549c523ab"
+            },
+            {
+              "description": "arn:aws:iam::[ACCOUNT]:user/alice",
+              "uuid": "9c08ba55-fab9-5983-b628-02284f5fb36c"
+            },
+            {
+              "description": "arn:aws:iam::[ACCOUNT]:user/bob",
+              "uuid": "41bf49c6-32d2-59c0-b322-7b3d6cde712e"
+            },
+            {
+              "description": "arn:aws:iam::[ACCOUNT]:user/svc-deploy",
+              "uuid": "99a9fdca-cdab-5d10-84ca-e6a15c9c8012"
+            },
+            {
+              "description": "arn:aws:s3:::cp-demo-kms",
+              "uuid": "70e87cee-eb65-5821-991e-6f24d74c9d69"
+            },
+            {
+              "description": "arn:aws:s3:::cp-demo-sse-s3",
+              "uuid": "90c1a4c1-d846-51b2-9739-ff23901f952c"
+            },
+            {
+              "description": "arn:aws:s3:::cp-demo-trail-logs",
+              "uuid": "5c10405f-0ff8-5f62-b277-85143f2d2a53"
+            },
+            {
+              "description": "us-east-1",
+              "uuid": "fc592882-0573-5ee7-836c-b1e2712d7835"
+            },
+            {
+              "description": "us-east-1/sg-1f642c312c21036a5",
+              "uuid": "6d366e29-4710-58f5-abeb-c47bec0f8ea3"
+            },
+            {
+              "description": "us-east-1/sg-d3f25076d5c16e645",
+              "uuid": "7b5cb9b8-fdd7-5498-908d-75719791b871"
+            }
+          ]
+        },
+        "observations": [
+          {
+            "collected": "2026-09-29T12:00:11Z",
+            "description": "Checked the console passwords and active access keys of 3 IAM user(s) against a 90-day unused limit.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 6b3a92d989afd6229ec65a15e0d259f4979a6625618eb0c8ae5d051939d22d8c",
+                "href": "evidence/6b3a92d989afd6229ec65a15e0d259f4979a6625618eb0c8ae5d051939d22d8c.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 2ec2a18544b6869ceffcc69c4f5c0bb52051ffba10a5ca18a9b88e9527b83ebc",
+                "href": "evidence/2ec2a18544b6869ceffcc69c4f5c0bb52051ffba10a5ca18a9b88e9527b83ebc.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 ecbd7b0fdc51b799f4cfdc1ba9c78134af6242d703fa5aede8a527d2d020d875",
+                "href": "evidence/ecbd7b0fdc51b799f4cfdc1ba9c78134af6242d703fa5aede8a527d2d020d875.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 d01b2a6dbac2f78bab777c67f572fa283bbab31e6232b55eafab1ca2c1554184",
+                "href": "evidence/d01b2a6dbac2f78bab777c67f572fa283bbab31e6232b55eafab1ca2c1554184.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 1c9e0b2d2ee980aca415fb21bd17eb00d124d78304d970bd862f450733cad943",
+                "href": "evidence/1c9e0b2d2ee980aca415fb21bd17eb00d124d78304d970bd862f450733cad943.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 32e04c18b314c62c08bbe4f1f320aed6b597428b81081ee4aec8ce8b69606516",
+                "href": "evidence/32e04c18b314c62c08bbe4f1f320aed6b597428b81081ee4aec8ce8b69606516.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 73c325111fd21d28060737851b3f9c5d4653f5ae6d7621af5da999bc27ff2710",
+                "href": "evidence/73c325111fd21d28060737851b3f9c5d4653f5ae6d7621af5da999bc27ff2710.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 ce1d4ffcac5f26dab95e42289a814579a31bdcd626acbd5101c7a5af9707973c",
+                "href": "evidence/ce1d4ffcac5f26dab95e42289a814579a31bdcd626acbd5101c7a5af9707973c.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "9c08ba55-fab9-5983-b628-02284f5fb36c",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "41bf49c6-32d2-59c0-b322-7b3d6cde712e",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "99a9fdca-cdab-5d10-84ca-e6a15c9c8012",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "d3089b35-35a6-5e75-9e94-9cc68a059ad4"
+          },
+          {
+            "collected": "2026-09-29T12:00:17Z",
+            "description": "Checked 1 multi-Region trail(s) visible from us-east-1 for logging of all management events.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 70bcbac7a3d5b6334ac6ee36ee2a6b98038a57750000e48cf7378a7396f6b273",
+                "href": "evidence/70bcbac7a3d5b6334ac6ee36ee2a6b98038a57750000e48cf7378a7396f6b273.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 cefb8acac7d81386ba771dee985e03b013e10313127e73f69b0643552e62abb6",
+                "href": "evidence/cefb8acac7d81386ba771dee985e03b013e10313127e73f69b0643552e62abb6.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 bdfb3cd4bb68b725595062c4bd797ec060af58d641ce4cfdcf0069a51c6d89ac",
+                "href": "evidence/bdfb3cd4bb68b725595062c4bd797ec060af58d641ce4cfdcf0069a51c6d89ac.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "4f47ae6f-f3ce-5857-b36d-108549c523ab",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "cc9b154d-16e5-5978-a8aa-3424dff54921"
+          },
+          {
+            "collected": "2026-09-29T12:00:26Z",
+            "description": "Checked MFA devices for the 2 of 3 IAM user(s) that have a console password.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995",
+                "href": "evidence/ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd",
+                "href": "evidence/ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8",
+                "href": "evidence/42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb",
+                "href": "evidence/b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07",
+                "href": "evidence/924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2",
+                "href": "evidence/4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "9c08ba55-fab9-5983-b628-02284f5fb36c",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "41bf49c6-32d2-59c0-b322-7b3d6cde712e",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "969416bc-aadd-5f27-9de8-2eb8dbb03e8f"
+          },
+          {
+            "collected": "2026-09-29T12:00:26Z",
+            "description": "bob has a console password but no MFA device.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995",
+                "href": "evidence/ef7557a375913b8c397ad5a51e15ac5d1152e432a9afdbe02080ab506f927995.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd",
+                "href": "evidence/ccd4d55f139ba2686a3cb29c204ceda29b6a17bbdaca6d9cda6fa31140f50ecd.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8",
+                "href": "evidence/42a3d176446f13c35a0ce750b48ec196f58a09386d6ecc4bd61a14b4f05dd7e8.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb",
+                "href": "evidence/b6adee14417013bca36bc5dafc486f93c251a30c70272876f327bd51740aa4cb.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07",
+                "href": "evidence/924b7f0ae3e43998a456b5d8fcac9260f857174c35462da07dbc5fa42e255f07.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2",
+                "href": "evidence/4ba0169789bb3a45dbc431820f488329c6b17ef972725f78ba9430e3fa009da2.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "41bf49c6-32d2-59c0-b322-7b3d6cde712e",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "ed512e0a-348a-57ec-bf4a-542a20c484ed"
+          },
+          {
+            "collected": "2026-09-29T12:00:30Z",
+            "description": "Checked the IAM account password policy against the profile's requirements.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13",
+                "href": "evidence/d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13.json"
+              }
+            ],
+            "uuid": "24e5869d-d961-5953-87f7-6d2330b4ba81"
+          },
+          {
+            "collected": "2026-09-29T12:00:30Z",
+            "description": "password policy minimum length 8 is below 14.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13",
+                "href": "evidence/d4d5acb88a473c7f5df94d8019d3a8e1d504874561692bdbde257b74d793ae13.json"
+              }
+            ],
+            "uuid": "7501ec9e-e450-51c7-89c3-c15fc15bbf07"
+          },
+          {
+            "collected": "2026-09-29T12:00:34Z",
+            "description": "Checked EBS encryption by default in us-east-1.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 5c5287a1f72a1c85c3493663b46b930a07cc47ebb881bfac0db0ce7433f986d2",
+                "href": "evidence/5c5287a1f72a1c85c3493663b46b930a07cc47ebb881bfac0db0ce7433f986d2.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "fc592882-0573-5ee7-836c-b1e2712d7835",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "24a8114a-569c-5bef-aac1-be31fc3ba1fd"
+          },
+          {
+            "collected": "2026-09-29T12:00:41Z",
+            "description": "Checked the default encryption of 3 S3 bucket(s) for SSE-KMS or DSSE-KMS.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe",
+                "href": "evidence/518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61",
+                "href": "evidence/87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05",
+                "href": "evidence/1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2",
+                "href": "evidence/7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "70e87cee-eb65-5821-991e-6f24d74c9d69",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "90c1a4c1-d846-51b2-9739-ff23901f952c",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "5c10405f-0ff8-5f62-b277-85143f2d2a53",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "386098e4-bbb8-554b-92ce-5c6abd84e891"
+          },
+          {
+            "collected": "2026-09-29T12:00:41Z",
+            "description": "bucket cp-demo-sse-s3 defaults to AES256; bucket cp-demo-trail-logs defaults to AES256.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe",
+                "href": "evidence/518b5d19f761081134390273a8c29a5a84b9ba06277cc74fa881ce276d63bbbe.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61",
+                "href": "evidence/87c904822f3da00ad6494b786b37119391ec16c0f311157569be4112ab045b61.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05",
+                "href": "evidence/1d170847836a57c80351c35162d816c78753ff37a35976d7676a44a7c3f48e05.json"
+              },
+              {
+                "description": "Redacted AWS API response, SHA-256 7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2",
+                "href": "evidence/7c0d1f45e778f8556abb34ad86337dc40f6976576d37f44737407731d36570f2.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "90c1a4c1-d846-51b2-9739-ff23901f952c",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "5c10405f-0ff8-5f62-b277-85143f2d2a53",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "ee53a34e-159c-55a8-a0c4-ebab2c105d29"
+          },
+          {
+            "collected": "2026-09-29T12:00:45Z",
+            "description": "Checked 2 security group(s) in us-east-1 for internet access to port(s) 22, 3389.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872",
+                "href": "evidence/8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "6d366e29-4710-58f5-abeb-c47bec0f8ea3",
+                "type": "inventory-item"
+              },
+              {
+                "subject-uuid": "7b5cb9b8-fdd7-5498-908d-75719791b871",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "13f4e0b4-0992-5edc-91d0-b1ed18f6c916"
+          },
+          {
+            "collected": "2026-09-29T12:00:45Z",
+            "description": "security group sg-1f642c312c21036a5 (cp-demo-open-ssh) in us-east-1 opens port(s) 22 to the internet.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872",
+                "href": "evidence/8612910148831503308cc2fcbb8a9aa2f1691946e4ed080f7aa7fd8d4d1db872.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "6d366e29-4710-58f5-abeb-c47bec0f8ea3",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "081a8315-0d5f-5cde-9db2-0aede95e96bd"
+          },
+          {
+            "collected": "2026-09-29T12:00:49Z",
+            "description": "Checked log file validation on 1 trail(s) in us-east-1.",
+            "methods": [
+              "EXAMINE"
+            ],
+            "relevant-evidence": [
+              {
+                "description": "Redacted AWS API response, SHA-256 61e302b55dedafe43edede5d0e250f1d43247211d56febd41bd181f225edf558",
+                "href": "evidence/61e302b55dedafe43edede5d0e250f1d43247211d56febd41bd181f225edf558.json"
+              }
+            ],
+            "subjects": [
+              {
+                "subject-uuid": "4f47ae6f-f3ce-5857-b36d-108549c523ab",
+                "type": "inventory-item"
+              }
+            ],
+            "uuid": "1f977221-a219-5b63-bd9d-68935bb52bc5"
+          }
+        ],
+        "reviewed-controls": {
+          "control-selections": [
+            {
+              "include-controls": [
+                {
+                  "control-id": "ac-2"
+                },
+                {
+                  "control-id": "au-2"
+                },
+                {
+                  "control-id": "ia-2.2"
+                },
+                {
+                  "control-id": "ia-5.1"
+                },
+                {
+                  "control-id": "sc-28"
+                },
+                {
+                  "control-id": "sc-28.1"
+                },
+                {
+                  "control-id": "sc-7"
+                },
+                {
+                  "control-id": "si-7.1"
+                }
+              ]
+            }
+          ]
+        },
+        "start": "2026-09-29T12:00:00Z",
+        "title": "controlproof run 20260929T120000Z",
+        "uuid": "acc4bab7-16ba-5d4b-a7fc-c50715a33465"
+      }
+    ],
+    "uuid": "1ea9379b-cdff-533f-a676-68e339530b7b"
+  }
+}

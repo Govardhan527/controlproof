@@ -1,0 +1,21 @@
+{
+  "collected_at": "2026-09-29T12:00:16Z",
+  "error": null,
+  "operation": "GetEventSelectors",
+  "region": "us-east-1",
+  "request": {
+    "TrailName": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+  },
+  "response": {
+    "AdvancedEventSelectors": [],
+    "EventSelectors": [
+      {
+        "IncludeManagementEvents": true,
+        "ReadWriteType": "All"
+      }
+    ],
+    "TrailARN": "arn:aws:cloudtrail:us-east-1:[ACCOUNT]:trail/cp-demo-trail"
+  },
+  "schema_version": "1.0.0",
+  "service": "cloudtrail"
+}

@@ -1,0 +1,12 @@
+{
+  "collected_at": "2026-09-29T12:00:33Z",
+  "error": null,
+  "operation": "GetEbsEncryptionByDefault",
+  "region": "us-east-1",
+  "request": {},
+  "response": {
+    "EbsEncryptionByDefault": true
+  },
+  "schema_version": "1.0.0",
+  "service": "ec2"
+}

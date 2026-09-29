@@ -22,7 +22,7 @@ from pydantic import (
     model_validator,
 )
 
-SCHEMA_VERSION: Literal["1.0.0"] = "1.0.0"
+RUN_RECORD_VERSION: Literal["1.1.0"] = "1.1.0"
 
 
 def _require_utc(value: datetime) -> datetime:
@@ -37,6 +37,8 @@ ControlId = Annotated[str, StringConstraints(pattern=r"^[a-z]{2}-\d+(\.\d+)?$")]
 Sha256 = Annotated[str, StringConstraints(pattern=r"^[0-9a-f]{64}$")]
 RunId = Annotated[str, StringConstraints(pattern=r"^\d{8}T\d{6}Z$")]
 Token = Annotated[str, StringConstraints(pattern=r"^[a-z0-9][a-z0-9-]*$")]
+AccountId = Annotated[str, StringConstraints(pattern=r"^[0-9]{12}$")]
+Region = Annotated[str, StringConstraints(pattern=r"^[a-z][a-z0-9-]*[0-9]$")]
 UtcDatetime = Annotated[AwareDatetime, AfterValidator(_require_utc)]
 
 
@@ -88,9 +90,11 @@ class ControlResult(Contract):
 
 
 class RunRecord(Contract):
-    schema_version: Literal["1.0.0"] = SCHEMA_VERSION
+    schema_version: Literal["1.1.0"] = RUN_RECORD_VERSION
     run_id: RunId
     profile_id: Token
+    account: AccountId
+    regions: tuple[Region, ...] = Field(min_length=1)
     started_at: UtcDatetime
     ended_at: UtcDatetime
     tool_version: str = Field(min_length=1)
