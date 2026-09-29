@@ -24,7 +24,8 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
             and no commit was created.
 - [x] M0 committed (2026-09-29): `17df0ed`..this commit on `main`. A clean clone passes
       `make check`, and `scripts/check_commits.py` passes on `origin/main..HEAD`.
-- [ ] CI green on GitHub. Needs the M0 commits pushed (owner's call).
+- [x] CI green on GitHub (2026-09-29): run 36592992569 on `7f04fb4`, all six jobs passed
+      (commit-hygiene checked 7 commits, 42 tests, no leaks, no known vulnerabilities).
 
 ## M1 (week 2)
 
@@ -75,8 +76,7 @@ Hardening buffer: fix defects, tighten docs, no new features.
 - **Tests:** `make check` green, `src/` coverage 100%. `pip-audit` and `gitleaks` clean when run
   locally. `make integration` collects 0 tests (expected until M2).
 - **Commits:** `17df0ed` skeleton, `9612a9f` commit rules, `7ca1db4` output validator, `195467c`
-  Makefile, `c26d26d` CI, `c957670` docs, then this status update. Not pushed.
-- **Not done:** CI has not run on GitHub (needs a push, the owner's call). ADR-0002 (A) items,
-  ADR-0003 and ADR-0004 await owner approval.
-- **Next step:** the owner pushes `main` and checks that CI is green, approves or amends the ADRs,
-  and answers OQ-1 to OQ-4 in `docs/SPEC_NOTES.md`. Then M1 starts.
+  Makefile, `c26d26d` CI, `c957670` docs, `7f04fb4` status; pushed to `origin/main`.
+- **Not done:** ADR-0002 (A) items, ADR-0003 and ADR-0004 await owner approval.
+- **Next step:** the owner approves or amends the ADRs and answers OQ-1 to OQ-4 in
+  `docs/SPEC_NOTES.md`. Then M1 starts.
