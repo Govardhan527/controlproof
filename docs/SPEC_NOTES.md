@@ -36,11 +36,29 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
     `type` (enum `statement-id` or `objective-id`), `target-id` and `status`. `status` requires
     `state`, enum **`satisfied` or `not-satisfied` only**. Optional `status.reason` suggests
     `pass`, `fail` or `other`. There is no native "not assessed" or "error" state (see OQ-1).
-- **Assessment-plan schema** (`oscal_assessment-plan_schema.json`, 1.2.3), needed for the
-  generated plan (ADR-0005): its required fields are UNVERIFIED, blocks M1.
-- **Format checking:** the schema uses JSON Schema `format` keywords. With `jsonschema`, formats
-  such as `date-time` are only enforced when the optional format dependencies are installed.
-  UNVERIFIED which formats the OSCAL schema uses and which ones jsonschema checks; this blocks M1.
+- **UUIDs:** `UUIDDatatype` accepts only version 4 ("random or pseudorandom") or version 5 UUIDs
+  (pattern `...-[45]...`). Deterministic version 5 UUIDs are therefore valid. VERIFIED.
+- **Assessment-plan schema** (release asset `oscal_assessment-plan_schema.json`, 1.2.3, SHA-256
+  `ea687b9d0ab1d84c9cb11ee0a5e22b17956fe892ee93f5acca937bef81d23ea2`, `$id`
+  `http://csrc.nist.gov/ns/oscal/1.2.3/oscal-ap-schema.json`), needed for the generated plan
+  (ADR-0005). VERIFIED:
+  - Root requires `assessment-plan`. It requires `uuid`, `metadata`, `import-ssp` and
+    `reviewed-controls`. `import-ssp` requires `href`, so a plan must point to a System Security
+    Plan (see OQ-6). `reviewed-controls` requires `control-selections`.
+  - `metadata` (in both schemas) requires `title`, `last-modified`, `version` and
+    `oscal-version`.
+- **Formats and patterns:** the assessment-results schema uses the `format` values `date-time`,
+  `email`, `uri` and `uri-reference`. `DateTimeWithTimezoneDatatype` also carries a regex
+  `pattern`, so a missing timezone is rejected whether or not formats are checked. Which formats
+  jsonschema checks without optional packages: UNVERIFIED, blocks M1. VERIFIED otherwise.
+- **Python cannot run one OSCAL pattern as-is.** `TokenDatatype` uses
+  `^(\p{L}|_)(\p{L}|\p{N}|[.\-_])*$`. Python's `re` module rejects `\p` ("bad escape"), so
+  jsonschema 4.26.0 raises `re.error` on any OSCAL document instead of validating it (probe
+  2026-09-29; the other 7 distinct patterns compile). Overriding the `pattern` keyword with the
+  `regex` package (2026.9.29) fixed it in a probe: the minimal assessment-results and
+  assessment-plan documents validated, and the probe rejected a bad token, a version-1 UUID, a
+  timestamp without timezone, a missing `import-ap` and a finding state `error`. This is an
+  experiment result, not a spec statement.
 
 ## 2. NIST SP 800-53 Rev 5: control identifiers
 
@@ -186,9 +204,30 @@ All retrievals are dated 2026-09-29 unless noted otherwise.
 - DescribeTrails (multi-Region flag, `LogFileValidationEnabled`) and GetEventSelectors:
   UNVERIFIED, blocks M2.
 
+### 5.6 moto coverage (unit tests and the CI fake)
+- Source: moto 5.2.3 (latest release on 2026-09-29), `IMPLEMENTATION_COVERAGE.md` at that tag.
+  VERIFIED.
+- **Not implemented:** IAM `simulate_principal_policy`, `simulate_custom_policy` and
+  `generate_credential_report`; ELBv2 `describe_ssl_policies`; Security Hub
+  `get_enabled_standards`; SSM `describe_instance_patch_states` and `list_compliance_summaries`.
+- **Implemented** (among those checked): IAM `get_account_password_policy`, `get_account_summary`,
+  `list_users`, `list_mfa_devices`, `list_access_keys`, `get_access_key_last_used`,
+  `get_credential_report`, policy and role listing; S3 bucket encryption, policy, public access
+  block, versioning, logging and object calls; S3 Control `get_public_access_block`; KMS
+  `get_key_rotation_status`, `list_keys`, `describe_key`, `create_key`, `enable_key_rotation`,
+  `schedule_key_deletion`; ELBv2 load balancer and listener create, describe and delete;
+  CloudTrail `describe_trails`, `get_trail_status`, `get_event_selectors`; EC2
+  `get_ebs_encryption_by_default`, security groups, VPCs, flow logs, volumes; AWS Config recorder
+  status; GuardDuty detectors; CloudWatch Logs `describe_log_groups`; RDS `describe_db_instances`;
+  ACM certificates; STS `get_caller_identity`.
+- **Consequence:** `simulate` controls cannot be tested against moto, and the moto-backed CI
+  demo cannot produce a real simulation result. They need a recorded-response test double
+  (botocore's `Stubber`, part of botocore) (M3). Whether moto evaluates bucket policies on
+  `PutObject`, which the `exercise` examples depend on: UNVERIFIED, blocks M3.
+
 ## 6. Open questions
 
-OQ-1 to OQ-4 were decided by the owner on 2026-09-29, as proposed below (ADR-0005).
+OQ-1 to OQ-4 and OQ-6 were decided by the owner on 2026-09-29, as proposed below (ADR-0005).
 
 - **OQ-1 (DECIDED 2026-09-29, ADR-0005): how to express `error` and `not_tested` in OSCAL.** A finding's
   `status.state` can only be `satisfied` or `not-satisfied`. 800-53A §3.3 allows "other than
@@ -207,6 +246,11 @@ OQ-1 to OQ-4 were decided by the owner on 2026-09-29, as proposed below (ADR-000
   example, so the goal stands; only the concrete change needs choosing, for example a bucket
   moved from SSE-KMS to SSE-S3 when the control requires KMS, or KMS rotation disabled on a
   tool-created key.
+- **OQ-6 (DECIDED 2026-09-29: option (a); ADR-0005): which SSP the generated assessment plan
+  imports.** `import-ssp.href` is
+  required (§1), and controlproof has no SSP. Options: (a) point it at a back-matter resource
+  inside the plan that states no SSP was supplied and names the assessed account; (b) let the
+  profile name an SSP href and fall back to (a) when it does not.
 
 ## 7. Plain-word explainers
 

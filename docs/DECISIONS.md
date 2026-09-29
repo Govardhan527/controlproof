@@ -48,10 +48,38 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
   10. **uv is pinned** to `>=0.12.9,<0.13` (`[tool.uv] required-version`, and `version` in CI).
 - **Input for ADR-0002a (to be written in M1):** compliance-trestle v5.1.0 (2026-09-02) declares
   `OSCAL_VERSION = '1.2.1'` and `OSCAL_VERSION_REGEX = r'^1\.2\.[0-1]$'`
-  (`trestle/oscal/__init__.py` at tag v5.1.0). It therefore does not cover the 1.2.3 pin as-is.
-  If 1.2.3 stands, the M1 default is `datamodel-code-generator` against the official schema.
+  (`trestle/oscal/__init__.py` at tag v5.1.0). Correction, 2026-09-29: a probe showed that
+  trestle 5.1.0 models still parse a document with `oscal-version` 1.2.3. The constant does not
+  block it, so trestle is a live option. See ADR-0002a.
 - **Consequence:** The toolchain is reproducible from `uv.lock`, and CI and local runs use the same
   make targets. A change to any (A) item needs owner approval and an ADR update.
+
+## ADR-0002a: OSCAL models
+
+- **Date:** 2026-09-29. **Status:** Accepted (owner chose B on 2026-09-29).
+- **Context:** M1 builds OSCAL assessment-results and a minimal assessment-plan (ADR-0005). The
+  official 1.2.3 schemas are the contract either way: every emitted file is validated against
+  them (SPEC_NOTES §1).
+- **Evidence** (probes run 2026-09-29 on the minimal documents and four bad variants):
+
+  | | A. compliance-trestle 5.1.0 | B. datamodel-code-generator 0.83.0 | C. Hand-written subset |
+  |---|---|---|---|
+  | Built from | OSCAL 1.2.1 models | the pinned 1.2.3 schema | the fields we emit |
+  | Parses an `oscal-version` 1.2.3 doc | yes | yes | yes |
+  | Rejects bad token, v1 UUID, no-timezone time | yes | yes, once `--type-mappings` maps date-time, email, uri and uri-reference to strings (the default output raised `TypeError` on every document) | only what we encode |
+  | Rejects finding state `error` | yes | **no**: the generator drops enums inside `allOf` | yes, if encoded |
+  | Runtime footprint | 39 distributions, including `paramiko`, `cryptography`, `bcrypt`, `pynacl`, `openpyxl`, `requests` | pydantic only; about 2,700 generated lines per model, committed | pydantic only; about 150 lines |
+  | `mypy --strict` | not checked | passes on the generated file | ours to keep strict |
+  | Where it sits relative to the plan | the planned first choice when it covers assessment-results cleanly (it does) | the planned fallback | not in the plan; needs this ADR |
+
+- **Recommendation:** B. It matches the pinned version exactly and adds no runtime dependency.
+  A regeneration script with the flags above makes it reproducible. Its looser enums are covered
+  by the mandatory official-schema validation. A is stricter but brings a large supply chain,
+  including SSH and crypto libraries, into a read-only security tool.
+- **Decision:** B. Models are generated from the vendored 1.2.3 assessment-results and
+  assessment-plan schemas by a committed script (`datamodel-code-generator` as a dev dependency,
+  `--output-model-type pydantic_v2.BaseModel` and the `--type-mappings` above). The generated
+  files are committed and every emitted document is still validated against the official schema.
 
 ## ADR-0003: Output schema versioning
 
@@ -107,7 +135,7 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
 
 ## ADR-0005: How results map into OSCAL assessment-results
 
-- **Date:** 2026-09-29. **Status:** Accepted (owner decided OQ-1 to OQ-4 on 2026-09-29).
+- **Date:** 2026-09-29. **Status:** Accepted (owner decided OQ-1 to OQ-4 and OQ-6 on 2026-09-29).
 - **Context:** OSCAL 1.2.3 constrains how results can be expressed (SPEC_NOTES §1, §6). This
   defines the OSCAL output, a public interface.
 - **Decision:**
@@ -125,6 +153,23 @@ interface change gets one. Status is `Proposed` until the owner approves, then `
      and `exercise` as `TEST` (SPEC_NOTES §3).
   4. **Finding target (OQ-4).** `target.type: objective-id`, `target-id: <control>_obj` (for
      example `sc-28_obj`), using part ids from the NIST SP 800-53 Rev 5.2.0 OSCAL catalog.
+  5. **SSP link (OQ-6, decided 2026-09-29).** The generated plan's `import-ssp.href` points to a
+     resource in the plan's own `back-matter` (`#<resource-uuid>`). That resource states that no
+     system security plan was supplied and names the assessed account.
 - **Consequence:** An assessor can tell a real failure from a test that did not run by the
-  reason and the prop, and neither is counted as satisfied. M1 must add the assessment-plan
-  schema to SPEC_NOTES and vendor it next to the assessment-results schema.
+  reason and the prop, and neither is counted as satisfied. The assessment-plan schema is
+  vendored next to the assessment-results schema (facts in SPEC_NOTES §1).
+
+## ADR-0006: Runtime dependencies `regex` and `PyYAML`
+
+- **Date:** 2026-09-29. **Status:** Accepted (owner approved 2026-09-29).
+- **Context:** The planned stack has no YAML parser, but profiles and `controlproof.allowlist.yaml`
+  are YAML. Validating against the official OSCAL schema with jsonschema crashes on the schema's
+  `\p{L}` pattern (SPEC_NOTES §1).
+- **Options:** PyYAML or ruamel.yaml for YAML. For patterns: `regex`, rewriting the official
+  patterns (rejected: the output would no longer be checked against the official schema), or
+  another validator.
+- **Decision:** add `regex` (a jsonschema `pattern` keyword backed by `regex.search`) and PyYAML
+  (`yaml.safe_load` only, never `yaml.load`) as runtime dependencies from M1.
+- **Consequence:** Two more packages in the SBOM and in the pip-audit scope. The OSCAL schemas
+  stay byte-for-byte official.
