@@ -1,6 +1,7 @@
 """The command line, end to end against moto (ADR-0009 §3)."""
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -15,9 +16,13 @@ RUNNER = CliRunner()
 ACCOUNT = "123456789012"
 
 
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+
+
 def invoke(*args: str) -> tuple[int, str, str]:
+    """Run the CLI; colour codes are stripped (rich colours output on CI runners)."""
     result = RUNNER.invoke(app, list(args))
-    return result.exit_code, result.stdout, result.stderr
+    return result.exit_code, ANSI.sub("", result.stdout), ANSI.sub("", result.stderr)
 
 
 @pytest.mark.usefixtures("moto")
