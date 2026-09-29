@@ -1,0 +1,11 @@
+schema_version: "1.0.0"
+id: stub-run-b
+title: Stub run B (pass, fail, not tested)
+provider: aws
+controls:
+  - id: ac-2
+    params: {outcome: pass}
+  - id: ac-6
+    params: {outcome: fail}
+  - id: sc-13
+    params: {outcome: not_tested}
