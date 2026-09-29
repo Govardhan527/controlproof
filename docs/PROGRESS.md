@@ -31,13 +31,14 @@ Tick an item only when its done-criteria pass and the evidence is stored or link
 
 Data model, profile format, OSCAL output from 3 stub controls, validated against the official
 schema in CI.
-- [ ] Done: schema validation green; golden files committed.
+- [x] Done: schema validation green; golden files committed.
       - [x] Locally (2026-09-29): `make check` green, 116 tests, 99% core coverage; the `schemas`
             step validates 8 example files against the official OSCAL 1.2.3 schemas and the
             project schemas. Each M1 commit also passed `make check` in a clean worktree.
       - [x] Golden files committed: `examples/<format>/stub-run-a.json` and `stub-run-b.json`
             (`2f53039`).
-      - [ ] Green in CI on GitHub. Needs a push (owner's call).
+      - [x] Green in CI on GitHub (2026-09-29): run 36598001727 on `bca8d92`, all six jobs
+            passed; the `schemas` job validated the 8 examples against the official schemas.
 - [x] Open questions OQ-1 to OQ-4 and OQ-6 answered by the owner (2026-09-29, ADR-0005).
 - [x] ADR-0002a (OSCAL models): generated models, accepted 2026-09-29.
 - [x] ADR-0006 (runtime dependencies `regex`, `PyYAML`): accepted 2026-09-29.
@@ -97,6 +98,6 @@ Hardening buffer: fix defects, tighten docs, no new features.
 - **Found:** jsonschema does not check `uri` or `uri-reference` formats with the installed packages
   (SPEC_NOTES §1, parked).
 - **Tests:** `make check` green locally, 116 tests, 99% core coverage, 8 examples valid.
-- **Not done:** CI has not run on the M1 commits (not pushed).
-- **Next step:** push, confirm CI green, tick M1. Then M2: runner, AWS provider, `inspect` rows 1 to
+- **CI:** run 36598001727 on `bca8d92` green (115 tests, 99.69% coverage, 8 examples valid).
+- **Next step:** M2: runner, AWS provider, `inspect` rows 1 to
   10 of ADR-0007 with moto pass and fail fixtures, evidence redaction, the CLI (`run`).
