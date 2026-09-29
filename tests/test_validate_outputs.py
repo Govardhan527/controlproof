@@ -53,6 +53,19 @@ def test_official_schema_is_applied_too(tmp_path: Path) -> None:
     assert run(tmp_path) == 1
 
 
+def test_official_schema_alone_is_enough(tmp_path: Path) -> None:
+    write(tmp_path / "schemas" / "official" / "oscal-x.schema.json", SCHEMA)
+    write(tmp_path / "examples" / "oscal-x" / "a.json", {"schema_version": "1.0.0"})
+    assert run(tmp_path) == 0
+
+
+def test_unicode_property_patterns_are_supported(tmp_path: Path) -> None:
+    write(tmp_path / "schemas" / "tok.schema.json", {"type": "string", "pattern": r"^\p{L}+$"})
+    write(tmp_path / "examples" / "tok" / "ok.json", "Grüße")
+    write(tmp_path / "examples" / "tok" / "bad.json", "abc1")
+    assert run(tmp_path) == 1
+
+
 def test_format_without_schema_fails(tmp_path: Path) -> None:
     write(tmp_path / "examples" / "orphan" / "a.json", {})
     assert run(tmp_path) == 1

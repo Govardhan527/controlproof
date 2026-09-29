@@ -1,12 +1,13 @@
 """Validate every example output in examples/ against its JSON Schema.
 
 Layout (ADR-0003):
-    examples/<format>/*.json              example outputs of one format
-    schemas/<format>.schema.json          the project's schema for that format (required)
-    schemas/official/<format>.schema.json the standard's own schema, where one exists (optional)
+    examples/<format>/*.json                  example outputs of one format
+    <schemas>/<format>.schema.json            the project's schema for that format
+    <schemas>/official/<format>.schema.json   the standard's own schema, where one exists
 
-Every example is validated against the project schema and, when present, the official schema.
-Exit codes: 0 all examples valid, 1 a schema is missing or invalid, or an example fails.
+Each format needs at least one of the two schemas; every example is validated against each one
+present. OSCAL formats have only the official schema. Exit codes: 0 all examples valid, 1 a schema
+is missing or invalid, or an example fails.
 """
 
 import argparse
@@ -17,7 +18,10 @@ from pathlib import Path
 from typing import Any
 
 from jsonschema.exceptions import SchemaError
-from jsonschema.validators import validator_for
+
+from controlproof.validation import build_validator, schema_errors
+
+DEFAULT_SCHEMAS = Path("src/controlproof/schemas")
 
 
 def load_json(path: Path) -> Any:
@@ -25,18 +29,12 @@ def load_json(path: Path) -> Any:
         return json.load(handle)
 
 
-def schema_errors(schema_path: Path, instance: Any) -> list[str]:
-    schema = load_json(schema_path)
-    validator_cls = validator_for(schema)
+def errors_against(schema_path: Path, instance: Any) -> list[str]:
     try:
-        validator_cls.check_schema(schema)
+        validator = build_validator(load_json(schema_path))
     except SchemaError as exc:
         return [f"schema {schema_path} is not a valid JSON Schema: {exc.message}"]
-    validator = validator_cls(schema, format_checker=validator_cls.FORMAT_CHECKER)
-    return [
-        f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: {error.message}"
-        for error in sorted(validator.iter_errors(instance), key=lambda e: list(map(str, e.path)))
-    ]
+    return schema_errors(validator, instance)
 
 
 def validate(examples_dir: Path, schemas_dir: Path) -> tuple[int, list[str]]:
@@ -48,25 +46,27 @@ def validate(examples_dir: Path, schemas_dir: Path) -> tuple[int, list[str]]:
     for stray in sorted(examples_dir.glob("*.json")):
         problems.append(f"{stray}: example outputs must live in examples/<format>/")
     for format_dir in sorted(p for p in examples_dir.iterdir() if p.is_dir()):
-        own = schemas_dir / f"{format_dir.name}.schema.json"
-        official = schemas_dir / "official" / f"{format_dir.name}.schema.json"
-        if not own.is_file():
-            problems.append(f"{format_dir}: no schema at {own}")
+        candidates = (
+            schemas_dir / f"{format_dir.name}.schema.json",
+            schemas_dir / "official" / f"{format_dir.name}.schema.json",
+        )
+        present = [path for path in candidates if path.is_file()]
+        if not present:
+            problems.append(f"{format_dir}: no schema at {candidates[0]} or {candidates[1]}")
             continue
         for example in sorted(format_dir.glob("*.json")):
             checked += 1
             instance = load_json(example)
-            for schema_path in (own, official):
-                if schema_path.is_file():
-                    for error in schema_errors(schema_path, instance):
-                        problems.append(f"{example} vs {schema_path}: {error}")
+            for schema_path in present:
+                for error in errors_against(schema_path, instance):
+                    problems.append(f"{example} vs {schema_path}: {error}")
     return checked, problems
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Validate example outputs against schemas.")
     parser.add_argument("--examples", type=Path, default=Path("examples"))
-    parser.add_argument("--schemas", type=Path, default=Path("schemas"))
+    parser.add_argument("--schemas", type=Path, default=DEFAULT_SCHEMAS)
     args = parser.parse_args(argv)
 
     checked, problems = validate(args.examples, args.schemas)
