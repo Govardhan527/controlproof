@@ -113,8 +113,9 @@ Hardening buffer: fix defects, tighten docs, no new features.
 
 - **Date:** 2026-09-30. **Current milestone:** M2, unit tier built; 2 of 10 controls and the real
   tier are still open.
-- **State of `main`:** pushed through `de9f454`. CI run 36625863577 green: 195 tests, 97.93%
-  coverage, 29 example files valid, no leaks, no known vulnerabilities. `make check` green
+- **State of `main`:** pushed and even with `origin/main` at the end of the session. Last code
+  change CI-checked: `de9f454`, run 36625863577 green (195 tests, 97.93% coverage, 29 example
+  files valid, no leaks, no known vulnerabilities); later commits changed only this file. `make check` green
   locally with 196 tests (one more test runs only locally).
 - **Built in M2 so far:** evidence recording and redaction, AWS provider (the only boto3 import;
   refuses undeclared calls), runner (errors never become passes), 8 inspect controls (ac-2,
