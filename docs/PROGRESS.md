@@ -109,20 +109,40 @@ Hardening buffer: fix defects, tighten docs, no new features.
 - [ ] Done: defects fixed, docs tightened.
 - [ ] Add the CI `release` job (tag `v*`: build, SBOM, PyPI trusted publishing), only after M6.
 
-## Last session
+## Last session (resume here)
 
-- **Date:** 2026-09-29
-- **Changed:** M2 unit tier built: evidence recording and redaction, AWS provider (the only boto3
-  import), runner, 8 inspect controls, CLI (`run`, `permissions`, `--version`), read-only IAM policy,
-  run record and profile 1.1.0, `evidence-record` 1.0.0, record-and-replay golden run. SPEC_NOTES
-  §5.8 verifies every call from botocore's models, AWS's API docs and AWS's service reference.
-- **Tests:** `make check` green, 196 tests, 98% core coverage, 29 example files valid. CI run
-  36604971296 on `4aabe9a` green (195 tests; the local-only brief check is not in git).
-- **Incident, fixed:** the first M2 push failed CI. gitleaks flagged three synthetic key-shaped
-  strings in the redaction test, and a CLI test broke on colour codes. The strings are now built
-  at runtime, and `.gitleaksignore` lists only those three published findings by fingerprint
-  (ADR-0002 item 6 amendment).
-- **Open for the owner:** OQ-7 (root-user data source for ac-6.2 and ia-2.1); a sandbox AWS
-  account for the real tier.
-- **Next step:** the owner answers OQ-7 and, when possible, provides a sandbox account. Then build
-  ac-6.2 and ia-2.1 and wire the real tier.
+- **Date:** 2026-09-30. **Current milestone:** M2, unit tier built; 2 of 10 controls and the real
+  tier are still open.
+- **State of `main`:** pushed through `de9f454`. CI run 36625863577 green: 195 tests, 97.93%
+  coverage, 29 example files valid, no leaks, no known vulnerabilities. `make check` green
+  locally with 196 tests (one more test runs only locally).
+- **Built in M2 so far:** evidence recording and redaction, AWS provider (the only boto3 import;
+  refuses undeclared calls), runner (errors never become passes), 8 inspect controls (ac-2,
+  ia-2.2, ia-5.1, sc-28, sc-28.1, au-2, si-7.1, sc-7), CLI (`run`, `permissions`, `--version`,
+  `--json`, exit codes 0 to 3), `docs/iam-readonly.json`, run record and profile 1.1.0,
+  `evidence-record` 1.0.0, golden run replayed from a recording (ADR-0009 §10).
+- **Incident, fixed (2026-09-29):** the first M2 push failed CI. gitleaks flagged three synthetic
+  key-shaped strings in the redaction test, and a CLI test broke on colour codes. The strings are
+  now built at runtime, and `.gitleaksignore` lists only those three published findings by
+  fingerprint (ADR-0002 item 6 amendment).
+- **Waiting on the owner:**
+  1. **OQ-7** (SPEC_NOTES §6): the data source for ac-6.2 (root access keys) and ia-2.1 (root
+     MFA). (a) `GetAccountSummary` keys: one call, and moto supports it, but AWS does not document
+     their meaning. (b) The IAM credential report: documented columns including the root user;
+     data up to 4 hours old; generating it replaces the stored report; moto has no root row, so
+     tests would use recorded responses. Recommended: (b), generating only when no current report
+     exists, and stating the report's generation time in the evidence.
+  2. **A sandbox AWS account** for the real tier (ADR-0009 §1). The owner has none yet. Until
+     then no control is described as validated in a real environment.
+- **Next steps, in order:**
+  1. On the OQ-7 answer: record it (SPEC_NOTES §5.8 and §6, ADR-0009 §10), verify the calls it
+     needs (`GetCredentialReport` and `GenerateCredentialReport` errors and report format, or the
+     summary keys), add them to `OPERATION_ACTIONS`, build ac-6.2 and ia-2.1 with tests, add them
+     to `REGISTRY`, the `aws-baseline` profile, the golden recording and `docs/iam-readonly.json`
+     (`CONTROLPROOF_UPDATE_GOLDEN=1 make test`).
+  2. When a sandbox exists: `tests/integration/` against it, the CI `integration` job wired to a
+     GitHub OIDC role (no stored keys), then remove the exit-5 allowance in `make integration`
+     and replace the moto recording behind the golden run with a real one.
+  3. Then close M2 and plan M3 (simulate and exercise controls, ADR-0007 rows 11 to 25).
+- **Check the state on resume:** `git status -sb` (expect clean and even with `origin/main`),
+  `make check`, and `gh run list --limit 1`.
